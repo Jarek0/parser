@@ -15,8 +15,8 @@ class ComputerService(
 
     fun import(file: File) {
         val fileContent = file.bufferedReader().readLines()
-        val computerDto = parserProvider.provide(file.extension).parse(fileContent)
-        computerRepository.addAll(computerDto)
+        val computers = parserProvider.provide(file.extension).parse(fileContent)
+        computerRepository.addAll(computers)
         computersChangedSubject.notifyObservers()
     }
 

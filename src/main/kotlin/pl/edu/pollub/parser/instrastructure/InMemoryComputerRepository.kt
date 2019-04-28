@@ -9,7 +9,7 @@ class InMemoryComputerRepository: ComputerRepository {
 
     private val persistedComputers = mutableListOf<Computer>()
 
-    override fun addAll(computers: List<Computer>) = persistedComputers.addAll(persistedComputers)
+    override fun addAll(computers: List<Computer>) = persistedComputers.addAll(computers)
 
     override fun getAll() = persistedComputers.toList()
 

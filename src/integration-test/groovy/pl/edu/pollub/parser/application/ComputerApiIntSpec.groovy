@@ -38,14 +38,14 @@ class ComputerApiIntSpec extends Specification {
         and:
             def expectedComputerDto = sampleComputer(
                     manufacturer: "Fujitsu",
-                    sizeOfMatrix: "14\"",
+                    matrixSize: "14\"",
                     resolution: "1920x1080",
                     matrixType: "blyszczaca",
                     touchscreen: "tak",
                     processor: "intel i7",
                     coresCount: 8,
                     timing: 1900,
-                    ram: "24",
+                    ram: "24GB",
                     discCapacity: "500GB",
                     discType: "HDD",
                     graphicCard: "intel HD Graphics 520",
