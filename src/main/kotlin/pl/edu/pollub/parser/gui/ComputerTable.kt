@@ -3,18 +3,26 @@ package pl.edu.pollub.parser.gui
 import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.application.ComputerApi
 import pl.edu.pollub.parser.domain.Computer
+import pl.edu.pollub.parser.domain.ComputerId
 import pl.edu.pollub.parser.domain.ComputersChangedObserver
 import pl.edu.pollub.parser.domain.ComputersChangedSubject
 import javax.swing.JScrollPane
 import javax.swing.JTable
 import javax.swing.table.DefaultTableModel
 import java.awt.Component as GuiComponent
+import javax.swing.ListSelectionModel
+import javax.swing.DefaultListSelectionModel
+import javax.swing.event.ListSelectionEvent
+
 
 typealias TableRows = Array<Array<String>>
 typealias TableRow = Array<String>
 
 @Component
-class ComputerTable(val api: ComputerApi, subject: ComputersChangedSubject): ComputersChangedObserver {
+class ComputerTable(private val api: ComputerApi,
+                    computersChangedSubject: ComputersChangedSubject,
+                    private val computerSelectedSubject: ComputerSelectedSubject
+): ComputersChangedObserver {
 
     private val table: JTable
     val body: JScrollPane
@@ -23,9 +31,11 @@ class ComputerTable(val api: ComputerApi, subject: ComputersChangedSubject): Com
         val model = DefaultTableModel(0, COLUMNS.size)
         model.setColumnIdentifiers(COLUMNS)
         table = JTable(model)
+        table.selectionModel = ForcedListSelectionModel()
         body = JScrollPane(table)
         table.fillsViewportHeight = true
-        subject.subscribe(this)
+        table.selectionModel.addListSelectionListener { handleElementSelected(it) }
+        computersChangedSubject.subscribe(this)
     }
 
     override fun receive() {
@@ -34,7 +44,36 @@ class ComputerTable(val api: ComputerApi, subject: ComputersChangedSubject): Com
         val model = DefaultTableModel(newContentConverted, COLUMNS)
         table.model = model
     }
+
+    private fun handleElementSelected(event: ListSelectionEvent) {
+        val selectedElementId = ComputerId(table.getValueAt(event.firstIndex, 0).toString())
+        computerSelectedSubject.notifyObservers(ComputerSelectedEvent(selectedElementId))
+    }
 }
+
+@Component
+class ComputerSelectedSubject {
+
+    private val observers: MutableSet<ComputerSelectedObserver> = mutableSetOf()
+
+    fun subscribe(observer: ComputerSelectedObserver) = observers.add(observer)
+
+    fun unsubscribe(observer: ComputerSelectedObserver) = observers.remove(observer)
+
+    fun notifyObservers(event: ComputerSelectedEvent) {
+        for(observer in observers) {
+            observer.receive(event)
+        }
+    }
+}
+
+interface ComputerSelectedObserver {
+
+    fun receive(event: ComputerSelectedEvent)
+
+}
+
+data class ComputerSelectedEvent(val id: ComputerId)
 
 fun convert(computers: Collection<Computer>): TableRows {
     return computers.fold(array2dOf(computers.size, COLUMNS.size))
@@ -75,3 +114,14 @@ val COLUMNS = arrayOf(
 
 fun array2dOf(sizeOuter: Int, sizeInner: Int): Array<Array<String>>
         = Array(sizeOuter) { Array(sizeInner) { "" } }
+
+class ForcedListSelectionModel : DefaultListSelectionModel() {
+    init {
+        selectionMode = ListSelectionModel.SINGLE_SELECTION
+    }
+
+    override fun clearSelection() {}
+
+    override fun removeSelectionInterval(index0: Int, index1: Int) {}
+
+}

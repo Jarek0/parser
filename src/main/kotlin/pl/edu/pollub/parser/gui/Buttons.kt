@@ -4,6 +4,8 @@ import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.application.ComputerApi
 import pl.edu.pollub.parser.application.ExportFileCommand
 import pl.edu.pollub.parser.application.ImportFileCommand
+import pl.edu.pollub.parser.application.RemoveComputerCommand
+import pl.edu.pollub.parser.domain.ComputerId
 import java.awt.Dimension
 import javax.swing.JButton
 import javax.swing.JPanel
@@ -13,7 +15,8 @@ import javax.swing.JFileChooser
 @Component
 class ComputerButtonsPanel(
         importFileButton: ImportFileButton,
-        exportFileButton: ExportFileButton
+        exportFileButton: ExportFileButton,
+        removeComputerButton: RemoveComputerButton
 ) {
 
     val body = JPanel(FlowLayout(FlowLayout.CENTER))
@@ -21,6 +24,7 @@ class ComputerButtonsPanel(
     init {
         body.add(importFileButton.body)
         body.add(exportFileButton.body)
+        body.add(removeComputerButton.body)
     }
 }
 
@@ -83,12 +87,24 @@ class EditComputerButton(private val api: ComputerApi) {
 }
 
 @Component
-class RemoveComputerButton(private val api: ComputerApi) {
+class RemoveComputerButton(private val api: ComputerApi, subject: ComputerSelectedSubject): ComputerSelectedObserver {
 
     val body: JButton = JButton(REMOVE_BUTTON_TEST)
+    var computerToRemoveId: ComputerId? = null
 
     init {
         body.preferredSize = Dimension(150, 30)
+        subject.subscribe(this)
+        body.addActionListener { handleSelectedComputerRemoved() }
+    }
+
+    override fun receive(event: ComputerSelectedEvent) {
+        computerToRemoveId = event.id
+    }
+
+    private fun handleSelectedComputerRemoved() {
+        val computerToRemoveId = computerToRemoveId ?: return
+        api.remove(RemoveComputerCommand(computerToRemoveId))
     }
 }
 
