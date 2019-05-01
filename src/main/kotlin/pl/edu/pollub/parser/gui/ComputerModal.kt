@@ -3,7 +3,10 @@ package pl.edu.pollub.parser.gui
 import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.application.AddComputerCommand
 import pl.edu.pollub.parser.application.ComputerApi
+import pl.edu.pollub.parser.application.GetComputerQuery
 import pl.edu.pollub.parser.domain.Computer
+import pl.edu.pollub.parser.domain.ComputerId
+import pl.edu.pollub.parser.domain.ComputersChangedSubject
 import pl.edu.pollub.parser.domain.DEFAULT_VALUE
 import java.awt.FlowLayout
 import java.awt.GridLayout
@@ -12,7 +15,7 @@ import javax.swing.*
 typealias ComputerFields = MutableMap<String, JTextField>
 
 @Component
-class ComputerModal(mainFrame: MainFrame, private val api: ComputerApi) {
+class ComputerModal(mainFrame: MainFrame, private val api: ComputerApi, private val computersChangedSubject: ComputersChangedSubject) {
 
     private val dialog = JDialog(mainFrame.body, ADD_COMPUTER_TITLE, true)
     private val panel = JPanel()
@@ -60,36 +63,47 @@ class ComputerModal(mainFrame: MainFrame, private val api: ComputerApi) {
         dialog.isVisible = true
     }
 
+    fun editComputer(computerToEditId: ComputerId) {
+        dialog.title = EDIT_COMPUTER_TITLE
+        val computerToEdit = api.get(GetComputerQuery(computerToEditId))
+        computerFields.fromComputer(computerToEdit)
+        okButton.addActionListener { handleEditComputer(computerToEdit) }
+        dialog.isVisible = true
+    }
+
     private fun handleAddComputer() {
         val addedComputer = computerFields.toComputer()
         api.add(AddComputerCommand(addedComputer))
         close()
     }
 
-    private fun close() {
-        dialog.isVisible = false
-        computerFields.forEach { name, field -> field.text = DEFAULT_VALUE }
+    private fun handleEditComputer(editedComputer: Computer) {
+        computerFields.toComputer(editedComputer)
+        computersChangedSubject.notifyObservers()
+        close()
     }
 
-    fun ComputerFields.toComputer() = Computer(
-            getFieldValue(0),
-            getFieldValue(1),
-            getFieldValue(2),
-            getFieldValue(3),
-            getFieldValue(4),
-            getFieldValue(5),
-            getFieldValue(6),
-            getFieldValue(7),
-            getFieldValue(8),
-            getFieldValue(9),
-            getFieldValue(10),
-            getFieldValue(11),
-            getFieldValue(12),
-            getFieldValue(13),
-            getFieldValue(14)
-    )
+    private fun close() {
+        dialog.isVisible = false
+        computerFields.forEach { _, field -> field.text = DEFAULT_VALUE }
+    }
+
+    private fun ComputerFields.toComputer(computer: Computer = Computer()): Computer {
+        val fieldValues = (1..15).map { getFieldValue(it) }.toTypedArray()
+        return convert(fieldValues, computer)
+    }
+
+    private fun ComputerFields.fromComputer(computer: Computer) {
+        val computerArray = convert(computer)
+        (1..15).forEach { setFieldValue(it, computerArray[it]) }
+    }
 
     private fun ComputerFields.getFieldValue(index: Int) = get(COLUMNS[index])?.text ?: DEFAULT_VALUE
+
+    private fun ComputerFields.setFieldValue(index: Int, value: String) {
+        val textField = get(COLUMNS[index]) ?: return
+        textField.text = value
+    }
 }
 
 const val ADD_COMPUTER_TITLE = "Add computer"

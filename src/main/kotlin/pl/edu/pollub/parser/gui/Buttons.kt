@@ -16,7 +16,7 @@ import javax.swing.JFileChooser
 class ComputerButtonsPanel(
         importFileButton: ImportFileButton,
         exportFileButton: ExportFileButton,
-        addComputerButton: AddComputerButton
+        editComputerButton: EditComputerButton
 ) {
 
     val body = JPanel(FlowLayout(FlowLayout.CENTER))
@@ -24,7 +24,7 @@ class ComputerButtonsPanel(
     init {
         body.add(importFileButton.body)
         body.add(exportFileButton.body)
-        body.add(addComputerButton.body)
+        body.add(editComputerButton.body)
     }
 }
 
@@ -82,13 +82,26 @@ class AddComputerButton(private val computerModal: ComputerModal) {
 }
 
 @Component
-class EditComputerButton(private val api: ComputerApi) {
+class EditComputerButton(private val computerModal: ComputerModal, subject: ComputerSelectedSubject): ComputerSelectedObserver {
 
     val body: JButton = JButton(EDIT_BUTTON_TEST)
+    var computerToEditId: ComputerId? = null
 
     init {
         body.preferredSize = Dimension(150, 30)
+        subject.subscribe(this)
+        body.addActionListener { handleSelectedComputerToEdit() }
     }
+
+    override fun receive(event: ComputerSelectedEvent) {
+        computerToEditId = event.id
+    }
+
+    private fun handleSelectedComputerToEdit() {
+        val computerToEditId = computerToEditId ?: return
+        computerModal.editComputer(computerToEditId)
+    }
+
 }
 
 @Component
@@ -100,14 +113,14 @@ class RemoveComputerButton(private val api: ComputerApi, subject: ComputerSelect
     init {
         body.preferredSize = Dimension(150, 30)
         subject.subscribe(this)
-        body.addActionListener { handleSelectedComputerRemoved() }
+        body.addActionListener { handleSelectedComputerToRemove() }
     }
 
     override fun receive(event: ComputerSelectedEvent) {
         computerToRemoveId = event.id
     }
 
-    private fun handleSelectedComputerRemoved() {
+    private fun handleSelectedComputerToRemove() {
         val computerToRemoveId = computerToRemoveId ?: return
         api.remove(RemoveComputerCommand(computerToRemoveId))
     }

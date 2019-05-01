@@ -3,21 +3,21 @@ package pl.edu.pollub.parser.domain
 import java.util.*
 
 class Computer(
-        val manufacturer: String = DEFAULT_VALUE,
-        val matrixSize: String = DEFAULT_VALUE,
-        val resolution: String = DEFAULT_VALUE,
-        val matrixType: String = DEFAULT_VALUE,
-        val touchscreen: String = DEFAULT_VALUE,
-        val processor: String = DEFAULT_VALUE,
-        val coresCount: String = DEFAULT_VALUE,
-        val timing: String = DEFAULT_VALUE,
-        val ram: String = DEFAULT_VALUE,
-        val discCapacity: String = DEFAULT_VALUE,
-        val discType: String = DEFAULT_VALUE,
-        val graphicCard: String = DEFAULT_VALUE,
-        val graphicCardMemory: String = DEFAULT_VALUE,
-        val operationSystem: String = DEFAULT_VALUE,
-        val opticalDrive: String = DEFAULT_VALUE
+        var manufacturer: String = DEFAULT_VALUE,
+        var matrixSize: String = DEFAULT_VALUE,
+        var resolution: String = DEFAULT_VALUE,
+        var matrixType: String = DEFAULT_VALUE,
+        var touchscreen: String = DEFAULT_VALUE,
+        var processor: String = DEFAULT_VALUE,
+        var coresCount: String = DEFAULT_VALUE,
+        var timing: String = DEFAULT_VALUE,
+        var ram: String = DEFAULT_VALUE,
+        var discCapacity: String = DEFAULT_VALUE,
+        var discType: String = DEFAULT_VALUE,
+        var graphicCard: String = DEFAULT_VALUE,
+        var graphicCardMemory: String = DEFAULT_VALUE,
+        var operationSystem: String = DEFAULT_VALUE,
+        var opticalDrive: String = DEFAULT_VALUE
 ) {
     val id: ComputerId = ComputerId(UUID.randomUUID().toString())
 

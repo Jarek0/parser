@@ -101,6 +101,25 @@ fun convert(computer: Computer): TableRow {
     )
 }
 
+fun convert(row: TableRow, computer: Computer = Computer()): Computer {
+    computer.manufacturer = row[0]
+    computer.matrixSize = row[1]
+    computer.resolution = row[2]
+    computer.matrixType = row[3]
+    computer.touchscreen = row[4]
+    computer.processor = row[5]
+    computer.coresCount = row[6]
+    computer.timing = row[7]
+    computer.ram = row[8]
+    computer.discCapacity = row[9]
+    computer.discType = row[10]
+    computer.graphicCard = row[11]
+    computer.graphicCardMemory = row[12]
+    computer.operationSystem = row[13]
+    computer.opticalDrive = row[14]
+    return computer
+}
+
 val COLUMNS = arrayOf(
         "Id", "Manufacturer", "Matrix Size", "Resolution", "Matrix Type", "Touchscreen",
         "Processor", "Cores Count", "Timing", "RAM", "Disc Capacity", "Disc Type",
