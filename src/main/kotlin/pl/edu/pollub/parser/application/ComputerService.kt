@@ -1,9 +1,7 @@
 package pl.edu.pollub.parser.application
 
 import pl.edu.pollub.dependencyinjection.Component
-import pl.edu.pollub.parser.domain.ComputerRepository
-import pl.edu.pollub.parser.domain.ComputersChangedSubject
-import pl.edu.pollub.parser.domain.ComputersParserProvider
+import pl.edu.pollub.parser.domain.*
 import java.io.File
 
 @Component
@@ -27,7 +25,23 @@ class ComputerService(
         val fileContent = parser.parseFrom(computers)
         val importFile = File(fileHint.toURI())
         importFile.writeText(fileContent)
+        computerRepository.removeAll()
+        computersChangedSubject.notifyObservers()
         return importFile
     }
+
+    fun add(computerToAdd: Computer) {
+        computerRepository.add(computerToAdd)
+        computersChangedSubject.notifyObservers()
+    }
+
+    fun remove(computerToRemoveId: ComputerId) {
+        computerRepository.remove(computerToRemoveId)
+        computersChangedSubject.notifyObservers()
+    }
+
+    fun get(id: ComputerId) = computerRepository.get(id)
+
+    fun getAll(): Collection<Computer> = computerRepository.getAll()
 
 }

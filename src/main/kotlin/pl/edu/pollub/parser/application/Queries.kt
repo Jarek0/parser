@@ -1,5 +1,5 @@
 package pl.edu.pollub.parser.application
 
-import java.io.File
+import pl.edu.pollub.parser.domain.ComputerId
 
-data class ExportFileQuery(val fileHint: File)
+data class GetComputerQuery(val id: ComputerId)
