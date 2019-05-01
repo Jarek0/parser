@@ -9,6 +9,8 @@ class ComputersChangedSubject {
 
     fun subscribe(observer: ComputersChangedObserver) = observers.add(observer)
 
+    fun unsubscribe(observer: ComputersChangedObserver) = observers.remove(observer)
+
     fun notifyObservers() {
         for(observer in observers) {
             observer.receive()
