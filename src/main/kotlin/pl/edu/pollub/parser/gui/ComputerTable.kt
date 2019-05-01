@@ -2,10 +2,7 @@ package pl.edu.pollub.parser.gui
 
 import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.application.ComputerApi
-import pl.edu.pollub.parser.domain.Computer
-import pl.edu.pollub.parser.domain.ComputerId
-import pl.edu.pollub.parser.domain.ComputersChangedObserver
-import pl.edu.pollub.parser.domain.ComputersChangedSubject
+import pl.edu.pollub.parser.domain.*
 import javax.swing.JScrollPane
 import javax.swing.JTable
 import javax.swing.table.DefaultTableModel
@@ -105,15 +102,13 @@ fun convert(computer: Computer): TableRow {
 }
 
 val COLUMNS = arrayOf(
-        "Id",
-        "Manufacturer",
-        "Matrix\nSize", "Resolution", "Matrix\nType", "Touchscreen",
-        "Processor", "Cores\nCount", "Timing", "RAM", "Disc\nCapacity", "Disc\nType",
-        "Graphic\nCard", "Graphic\nCard\nMemory", "Operation\nSystem", "Optical\nDrive"
+        "Id", "Manufacturer", "Matrix Size", "Resolution", "Matrix Type", "Touchscreen",
+        "Processor", "Cores Count", "Timing", "RAM", "Disc Capacity", "Disc Type",
+        "Graphic Card", "Graphic Card Memory", "Operation System", "Optical Drive"
 )
 
 fun array2dOf(sizeOuter: Int, sizeInner: Int): Array<Array<String>>
-        = Array(sizeOuter) { Array(sizeInner) { "" } }
+        = Array(sizeOuter) { Array(sizeInner) { DEFAULT_VALUE } }
 
 class ForcedListSelectionModel : DefaultListSelectionModel() {
     init {

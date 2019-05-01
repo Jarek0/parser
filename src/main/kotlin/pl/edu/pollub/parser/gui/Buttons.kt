@@ -16,7 +16,7 @@ import javax.swing.JFileChooser
 class ComputerButtonsPanel(
         importFileButton: ImportFileButton,
         exportFileButton: ExportFileButton,
-        removeComputerButton: RemoveComputerButton
+        addComputerButton: AddComputerButton
 ) {
 
     val body = JPanel(FlowLayout(FlowLayout.CENTER))
@@ -24,7 +24,7 @@ class ComputerButtonsPanel(
     init {
         body.add(importFileButton.body)
         body.add(exportFileButton.body)
-        body.add(removeComputerButton.body)
+        body.add(addComputerButton.body)
     }
 }
 
@@ -67,12 +67,17 @@ class ExportFileButton(private val api: ComputerApi, private val fileChooser: Fi
 }
 
 @Component
-class AddComputerButton(private val api: ComputerApi) {
+class AddComputerButton(private val computerModal: ComputerModal) {
 
     val body: JButton = JButton(ADD_BUTTON_TEST)
 
     init {
         body.preferredSize = Dimension(150, 30)
+        body.addActionListener { handleAddComputer() }
+    }
+
+    private fun handleAddComputer() {
+        computerModal.addComputer()
     }
 }
 

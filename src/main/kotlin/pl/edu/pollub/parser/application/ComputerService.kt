@@ -12,6 +12,7 @@ class ComputerService(
 ) {
 
     fun import(file: File) {
+        computerRepository.removeAll()
         val fileContent = file.bufferedReader().readText()
         val parser = parserProvider.provide(file.extension)
         val computers = parser.parseFrom(fileContent)
