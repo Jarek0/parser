@@ -5,7 +5,7 @@ import pl.edu.pollub.dependencyinjection.Component
 @Component
 class ComputersChangedSubject {
 
-    private val observers: MutableList<ComputersChangedObserver> = mutableListOf()
+    private val observers: MutableSet<ComputersChangedObserver> = mutableSetOf()
 
     fun subscribe(observer: ComputersChangedObserver) = observers.add(observer)
 

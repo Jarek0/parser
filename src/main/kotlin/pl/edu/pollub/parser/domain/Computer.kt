@@ -1,6 +1,8 @@
 package pl.edu.pollub.parser.domain
 
-data class Computer(
+import java.util.*
+
+class Computer(
         val manufacturer: String = DEFAULT_VALUE,
         val matrixSize: String = DEFAULT_VALUE,
         val resolution: String = DEFAULT_VALUE,
@@ -16,6 +18,26 @@ data class Computer(
         val graphicCardMemory: String = DEFAULT_VALUE,
         val operationSystem: String = DEFAULT_VALUE,
         val opticalDrive: String = DEFAULT_VALUE
-)
+) {
+    val id: ComputerId = ComputerId(UUID.randomUUID().toString())
 
-const val DEFAULT_VALUE = "brak"
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Computer
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+}
+
+data class ComputerId(val value: String)
+
+const val DEFAULT_VALUE = ""

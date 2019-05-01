@@ -57,6 +57,6 @@ object ApplicationContext {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getComponent(c: Class<T>): T = componentsInstances.first { it::class.java == c } as T
+    fun <T> getComponent(c: Class<T>): T = componentsInstances.first { c.isAssignableFrom(it::class.java) } as T
 
 }

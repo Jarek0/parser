@@ -24,8 +24,13 @@ const val XML_FORMAT = "xml"
 
 @Component
 class InvalidFileComputerParser: ComputerFileParser {
-    override fun parse(fileContent: List<String>): List<Computer> {
-        return emptyList()
+
+    override fun parseFrom(fileContent: String): Set<Computer> {
+        return emptySet()
+    }
+
+    override fun parseFrom(computers: Collection<Computer>): String {
+        return ""
     }
 
 }

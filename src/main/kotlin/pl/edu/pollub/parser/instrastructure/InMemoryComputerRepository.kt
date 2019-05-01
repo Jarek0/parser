@@ -7,11 +7,11 @@ import pl.edu.pollub.parser.domain.ComputerRepository
 @Component
 class InMemoryComputerRepository: ComputerRepository {
 
-    private val persistedComputers = mutableListOf<Computer>()
+    private val persistedComputers = mutableSetOf<Computer>()
 
-    override fun addAll(computers: List<Computer>) = persistedComputers.addAll(computers)
+    override fun addAll(computers: Collection<Computer>) = persistedComputers.addAll(computers)
 
-    override fun getAll() = persistedComputers.toList()
+    override fun getAll() = persistedComputers.toSet()
 
     override fun clear() = persistedComputers.clear()
 
