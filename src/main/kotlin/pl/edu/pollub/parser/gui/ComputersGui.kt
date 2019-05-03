@@ -7,7 +7,7 @@ import javax.swing.JFrame
 import javax.swing.JLabel
 
 @Component
-class ComputerGui(mainFrame: MainFrame, private val table: ComputerTable, private val buttonsPanel: ComputerButtonsPanel) {
+class ComputersGui(mainFrame: MainFrame, private val table: ComputersTable, private val buttonsPanel: ComputerButtonsPanel) {
 
 
     init {

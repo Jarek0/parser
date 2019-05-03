@@ -18,8 +18,8 @@ class InMemoryComputerRepository: ComputerRepository {
 
     override fun removeAll() = persistedComputers.clear()
 
-    override fun remove(id: ComputerId) = persistedComputers.removeIf { it.id == id }
+    override fun removeById(id: ComputerId) = persistedComputers.removeIf { it.id == id }
 
-    override fun get(id: ComputerId) = persistedComputers.firstOrNull { it.id == id } ?: Computer()
+    override fun getById(id: ComputerId) = persistedComputers.firstOrNull { it.id == id } ?: Computer()
 
 }

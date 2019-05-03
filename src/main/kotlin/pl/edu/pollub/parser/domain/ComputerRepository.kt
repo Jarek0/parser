@@ -10,8 +10,8 @@ interface ComputerRepository {
 
     fun removeAll()
 
-    fun remove(id: ComputerId): Boolean
+    fun removeById(id: ComputerId): Boolean
 
-    fun get(id: ComputerId): Computer
+    fun getById(id: ComputerId): Computer
 
 }

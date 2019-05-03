@@ -2,7 +2,7 @@ package pl.edu.pollub.parser.gui
 
 import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.application.ComputerApi
-import pl.edu.pollub.parser.application.ExportFileCommand
+import pl.edu.pollub.parser.application.ExportFileQuery
 import pl.edu.pollub.parser.application.ImportFileCommand
 import pl.edu.pollub.parser.application.RemoveComputerCommand
 import pl.edu.pollub.parser.domain.ComputerId
@@ -14,19 +14,32 @@ import javax.swing.JFileChooser
 
 @Component
 class ComputerButtonsPanel(
-        importFileButton: ImportFileButton,
-        exportFileButton: ExportFileButton,
-        editComputerButton: EditComputerButton
+        computersButtons1: ComputersButtons1,
+        computersButtons2: ComputersButtons2
 ) {
 
     val body = JPanel(FlowLayout(FlowLayout.CENTER))
 
     init {
-        body.add(importFileButton.body)
-        body.add(exportFileButton.body)
-        body.add(editComputerButton.body)
+        body.add(computersButtons1.importFileButton.body)
+        body.add(computersButtons1.addComputerButton.body)
+        body.add(computersButtons1.editComputerButton.body)
+        body.add(computersButtons2.removeComputerButton.body)
+        body.add(computersButtons2.exportFileButton.body)
     }
 }
+
+@Component
+class ComputersButtons1(val importFileButton: ImportFileButton,
+                        val addComputerButton: AddComputerButton,
+                        val editComputerButton: EditComputerButton)
+
+
+@Component
+class ComputersButtons2(val removeComputerButton: RemoveComputerButton,
+                        val exportFileButton: ExportFileButton)
+
+
 
 @Component
 class ImportFileButton(private val api: ComputerApi, private val fileChooser: FileChooser) {
@@ -61,7 +74,7 @@ class ExportFileButton(private val api: ComputerApi, private val fileChooser: Fi
         val chosenOption = fileChooser.showSaveDialog()
         if (chosenOption == JFileChooser.APPROVE_OPTION) {
             val file = fileChooser.getSelectedFile()
-            api.export(ExportFileCommand(file))
+            api.export(ExportFileQuery(file))
         }
     }
 }

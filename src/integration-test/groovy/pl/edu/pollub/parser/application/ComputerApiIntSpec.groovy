@@ -200,22 +200,36 @@ class ComputerApiIntSpec extends Specification {
             def expectedContent = readFile("computers.txt").getText()
         and:
             def fileHint = temporaryFolder.newFile("exportedComputers.txt")
-            def command = new ExportFileCommand(fileHint)
+            def command = new ExportFileQuery(fileHint)
         when:
             def resultFile = computerApi.export(command)
         then:
             resultFile.getText() == expectedContent
             resultFile.name == fileHint.name
             resultFile.path == fileHint.path
-        and:
-            repository.getAll().isEmpty()
-        and:
-            observer.isNotified()
     }
 
     def "should add computer"() {
         given:
-            def computer = sampleComputer(
+            String[] computerData = ["Fujitsu", "14\"", "1920x1080",
+                                     "blyszczaca", "tak", "intel i7",
+                                     "8", "1900", "24GB", "500GB",
+                                     "HDD", "intel HD Graphics 520",
+                                     "1GB", "brak systemu", "Blu-Ray"]
+            def command = new AddComputerCommand(computerData)
+        when:
+            computerApi.add(command)
+        then:
+            def addedComputers = repository.getAll()
+            addedComputers.size() == 1
+            assertComputer(addedComputers[0]).hasData(computerData)
+        and:
+            observer.isNotified()
+    }
+
+    def "should edit computer"() {
+        given:
+            def computerToEdit = sampleComputer(
                     manufacturer: "Fujitsu",
                     matrixSize: "14\"",
                     resolution: "1920x1080",
@@ -232,18 +246,72 @@ class ComputerApiIntSpec extends Specification {
                     operationSystem: "brak systemu",
                     opticalDrive: "Blu-Ray"
             )
-            def command = new AddComputerCommand(computer)
+            repository.add(computerToEdit)
+            def computerToEditId = computerToEdit.id
+            String[] computerToEditData = [
+                    "Fujitsu", "15\"", "1400x1080",
+                    "matowa", "tak", "intel i8",
+                    "8", "1900", "24GB", "600GB",
+                    "HDD", "intel HD Graphics 520",
+                    "1GB", "brak systemu", "Blu-Ray"
+            ]
+            def command = new EditComputerCommand(computerToEditId, computerToEditData)
         when:
-            computerApi.add(command)
+            computerApi.edit(command)
         then:
-            def addedComputers = repository.getAll()
-            addedComputers.size() == 1
-            assertComputer(addedComputers[0]).isDataSame(computer)
+            def editedComputers = repository.getAll()
+            editedComputers.size() == 1
+            def editedComputer = editedComputers[0]
+            editedComputer.id == computerToEditId
+            assertComputer(editedComputer).hasData(computerToEditData)
         and:
             observer.isNotified()
     }
 
     def "should remove computer"() {
+        given:
+            def computers = [
+                    sampleComputer(
+                            manufacturer: "Fujitsu",
+                            matrixSize: "14\"",
+                            resolution: "1920x1080",
+                            matrixType: "blyszczaca",
+                            touchscreen: "tak",
+                            processor: "intel i7",
+                            coresCount: 8,
+                            timing: 1900,
+                            ram: "24GB",
+                            discCapacity: "500GB",
+                            discType: "HDD",
+                            graphicCard: "intel HD Graphics 520",
+                            graphicCardMemory: "1GB",
+                            operationSystem: "brak systemu",
+                            opticalDrive: "Blu-Ray"
+                    ),
+                    sampleComputer(
+                            manufacturer: "Huawei",
+                            matrixSize: "13\"",
+                            matrixType: "matowa",
+                            touchscreen: "nie",
+                            processor: "intel i7",
+                            coresCount: "4",
+                            timing: "2400",
+                            ram: "12GB",
+                            discCapacity: "24GB",
+                            discType: "HDD",
+                            graphicCard: "NVIDIA GeForce GTX 1050",
+                            opticalDrive: "brak"
+                    )
+            ]
+            repository.addAll(computers)
+        when:
+            computerApi.removeAll()
+        then:
+            def addedComputers = repository.getAll()
+            addedComputers.size() == 0
+    }
+
+    def "should remove all computers"() {
         given:
             def computer = sampleComputer(
                     manufacturer: "Fujitsu",
@@ -263,12 +331,11 @@ class ComputerApiIntSpec extends Specification {
                     opticalDrive: "Blu-Ray"
             )
             repository.add(computer)
-            def command = new RemoveComputerCommand(computer.id)
         when:
-            computerApi.remove(command)
+            computerApi.removeAll()
         then:
-            def addedComputers = repository.getAll()
-            addedComputers.size() == 0
+            def computers = repository.getAll()
+            computers.size() == 0
     }
 
     def "should get computer"() {
@@ -293,9 +360,9 @@ class ComputerApiIntSpec extends Specification {
             repository.add(computer)
             def query = new GetComputerQuery(computer.id)
         when:
-            def foundComputer = computerApi.get(query)
+            def foundComputerData = computerApi.get(query)
         then:
-            foundComputer == computer
+            assertComputer(computer).hasDataAndId(foundComputerData)
     }
 
     def "should get all computers"() {
@@ -365,10 +432,13 @@ class ComputerApiIntSpec extends Specification {
             ]
             repository.addAll(computers)
         when:
-            def foundComputers = computerApi.getAll()
+            def foundComputersData = computerApi.getAll()
         then:
-            foundComputers.size() == 4
-            foundComputers.containsAll(computers)
+            foundComputersData.length == 4
+            assertComputer(computers[0]).hasDataAndId(foundComputersData[0])
+            assertComputer(computers[1]).hasDataAndId(foundComputersData[1])
+            assertComputer(computers[2]).hasDataAndId(foundComputersData[2])
+            assertComputer(computers[3]).hasDataAndId(foundComputersData[3])
     }
 
     class FakeComputersChangedObserver implements ComputersChangedObserver {

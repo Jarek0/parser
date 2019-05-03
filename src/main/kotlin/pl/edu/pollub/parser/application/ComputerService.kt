@@ -26,22 +26,31 @@ class ComputerService(
         val fileContent = parser.parseFrom(computers)
         val importFile = File(fileHint.toURI())
         importFile.writeText(fileContent)
-        computerRepository.removeAll()
-        computersChangedSubject.notifyObservers()
         return importFile
     }
 
-    fun add(computerToAdd: Computer) {
-        computerRepository.add(computerToAdd)
+    fun add(computerToAddData: ComputerTableRow) {
+        val computer = convert(computerToAddData)
+        computerRepository.add(computer)
+        computersChangedSubject.notifyObservers()
+    }
+
+    fun edit(id: ComputerId, computerToEditData: ComputerTableRow) {
+        val computerToEdit = computerRepository.getById(id)
+        convert(computerToEditData, computerToEdit)
         computersChangedSubject.notifyObservers()
     }
 
     fun remove(computerToRemoveId: ComputerId) {
-        computerRepository.remove(computerToRemoveId)
+        computerRepository.removeById(computerToRemoveId)
         computersChangedSubject.notifyObservers()
     }
 
-    fun get(id: ComputerId) = computerRepository.get(id)
+    fun removeAll() {
+        computerRepository.removeAll()
+    }
+
+    fun get(id: ComputerId): Computer = computerRepository.getById(id)
 
     fun getAll(): Collection<Computer> = computerRepository.getAll()
 
