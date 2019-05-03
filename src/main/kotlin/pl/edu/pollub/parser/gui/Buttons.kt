@@ -82,7 +82,7 @@ class ExportFileButton(private val api: ComputerApi, private val fileChooser: Fi
 @Component
 class AddComputerButton(private val computerModal: ComputerModal, subject: ComputerSelectedSubject): ComputerSelectedObserver {
 
-    val body: JButton = JButton(ADD_BUTTON_TEST)
+    val body: JButton = JButton(ADD_BUTTON_TEXT)
     var selectedComputer: ComputerId? = null
 
     init {
@@ -103,7 +103,7 @@ class AddComputerButton(private val computerModal: ComputerModal, subject: Compu
 @Component
 class EditComputerButton(private val computerModal: ComputerModal, subject: ComputerSelectedSubject): ComputerSelectedObserver {
 
-    val body: JButton = JButton(EDIT_BUTTON_TEST)
+    val body: JButton = JButton(EDIT_BUTTON_TEXT)
     var computerToEditId: ComputerId? = null
 
     init {
@@ -126,7 +126,7 @@ class EditComputerButton(private val computerModal: ComputerModal, subject: Comp
 @Component
 class RemoveComputerButton(private val api: ComputerApi, subject: ComputerSelectedSubject): ComputerSelectedObserver {
 
-    val body: JButton = JButton(REMOVE_BUTTON_TEST)
+    val body: JButton = JButton(REMOVE_BUTTON_TEXT)
     var computerToRemoveId: ComputerId? = null
 
     init {
@@ -160,6 +160,6 @@ class FileChooser(private val mainFrame: MainFrame) {
 
 const val IMPORT_BUTTON_TEXT = "Import"
 const val EXPORT_BUTTON_TEXT = "Export"
-const val ADD_BUTTON_TEST = "Add"
-const val EDIT_BUTTON_TEST = "Edit"
-const val REMOVE_BUTTON_TEST = "Remove"
+const val ADD_BUTTON_TEXT = "Add"
+const val EDIT_BUTTON_TEXT = "Edit"
+const val REMOVE_BUTTON_TEXT = "Remove"

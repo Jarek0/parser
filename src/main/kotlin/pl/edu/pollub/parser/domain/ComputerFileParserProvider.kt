@@ -11,16 +11,18 @@ class ComputersParserProvider(
 
     fun provide(fileType: String): ComputerFileParser {
         return when(fileType) {
-            TXT_FORMAT -> txtFileComputersComputerParser
-            XML_FORMAT -> xmlFileComputersComputerParser
+            Format.TXT.value -> txtFileComputersComputerParser
+            Format.XML.value -> xmlFileComputersComputerParser
             else -> invalidComputerParser
         }
     }
 
 }
 
-const val TXT_FORMAT = "txt"
-const val XML_FORMAT = "xml"
+enum class Format(val value: String) {
+    TXT("txt"),
+    XML("xml")
+}
 
 @Component
 class InvalidFileComputerParser: ComputerFileParser {

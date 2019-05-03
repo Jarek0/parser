@@ -11,11 +11,6 @@ class TxtFileComputerParser: ComputerFileParser {
         return fileContent.lines().filter { it.isNotBlank() }.map { parseSingle(it) }.toSet()
     }
 
-    private fun parseSingle(line: String): Computer {
-        val splittedLine = line.split(DELIMITER).toTypedArray()
-        return convert(splittedLine)
-    }
-
     override fun parseFrom(computers: Collection<Computer>): String {
         val builder = StringBuilder()
         for(computer in computers) {
@@ -24,6 +19,11 @@ class TxtFileComputerParser: ComputerFileParser {
             if(computers.isNotLast(computer)) builder.append(System.getProperty("line.separator"))
         }
         return builder.toString()
+    }
+
+    private fun parseSingle(line: String): Computer {
+        val splittedLine = line.split(DELIMITER).toTypedArray()
+        return convert(splittedLine)
     }
 
     private fun parseSingle(c: Computer): String {

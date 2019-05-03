@@ -1,0 +1,133 @@
+<laptops>
+
+	<laptop>
+
+		<manufacturer>Fujitsu</manufacturer>
+	
+		<screen>
+			<size>14"</size>
+			<resolution>1920x1080</resolution>
+			<type>blyszczaca</type>
+			<touchscreen>tak</touchscreen>
+		</screen>
+
+		<processor>
+			<name>intel i7</name>
+			<physical_cores>8</physical_cores>
+			<clock_speed>1900</clock_speed>
+		</processor>
+		
+		<ram>24GB</ram>
+		
+		<disc>
+			<storage>500GB</storage>
+			<type>HDD</type>
+		</disc>
+		
+		<graphic_card>
+			<name>intel HD Graphics 520</name>
+			<memory>1GB</memory>
+		</graphic_card>
+		
+		<os>brak systemu</os>
+		
+		<disc_reader>Blu-Ray</disc_reader>
+		
+	</laptop>
+
+	<laptop>
+
+		<manufacturer>Huawei</manufacturer>
+
+		<screen>
+			<size>13"</size>
+			<type>matowa</type>
+			<touchscreen>nie</touchscreen>
+		</screen>
+
+		<processor>
+			<name>intel i7</name>
+			<physical_cores>4</physical_cores>
+			<clock_speed>2400</clock_speed>
+		</processor>
+
+		<ram>12GB</ram>
+
+		<disc>
+			<storage>24GB</storage>
+			<type>HDD</type>
+		</disc>
+
+		<graphic_card>
+			<name>NVIDIA GeForce GTX 1050</name>
+		</graphic_card>
+
+		<disc_reader>brak</disc_reader>
+
+	</laptop>
+
+	<laptop>
+
+		<manufacturer>Dell</manufacturer>
+
+		<screen>
+			<size>12"</size>
+			<type>matowa</type>
+			<touchscreen>nie</touchscreen>
+		</screen>
+
+		<processor>
+			<name>intel i7</name>
+			<physical_cores>4</physical_cores>
+			<clock_speed>2800</clock_speed>
+		</processor>
+
+		<ram>8GB</ram>
+
+		<disc>
+			<storage>240GB</storage>
+			<type>SSD</type>
+		</disc>
+
+		<graphic_card>
+			<name>intel HD Graphics 4000</name>
+			<memory>1GB</memory>
+		</graphic_card>
+
+		<os>Windows 7 Home</os>
+
+	</laptop>
+
+	<laptop>
+
+		<manufacturer>Asus</manufacturer>
+
+		<screen>
+			<size>14"</size>
+			<resolution>1600x900</resolution>
+			<type>matowa</type>
+			<touchscreen>nie</touchscreen>
+		</screen>
+
+		<processor>
+			<name>intel i5</name>
+			<physical_cores>4</physical_cores>
+		</processor>
+
+		<ram>16GB</ram>
+
+		<disc>
+			<storage>120GB</storage>
+			<type>SSD</type>
+		</disc>
+
+		<graphic_card>
+			<name>intel HD Graphics 5000</name>
+			<memory>1GB</memory>
+		</graphic_card>
+
+		<disc_reader>brak</disc_reader>
+
+	</laptop>
+	
+</laptops>

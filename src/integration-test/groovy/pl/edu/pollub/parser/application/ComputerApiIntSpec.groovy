@@ -167,6 +167,117 @@ class ComputerApiIntSpec extends Specification {
     }
 
 
+    def "should import xml file with some computers"() {
+        given:
+            def command = new ImportFileCommand(readFile("computers.xml"))
+        and:
+            def expectedComputers = [
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Asus"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1600x900",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i5",
+                                    physicalCores: "4",
+                            ),
+                            ram: sampleRam(value: "16GB"),
+                            disc: sampleDisc(
+                                    storage: "120GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 5000",
+                                    memory: "1GB",
+                            ),
+                            discReader: sampleDiscReader(value: "brak")
+                    )
+            ]
+        when:
+            computerApi.import(command)
+        then:
+            def importedComputers = repository.getAll()
+            importedComputers.size() == 4
+            assertComputer(importedComputers[0]).isDataSame(expectedComputers[0])
+            assertComputer(importedComputers[1]).isDataSame(expectedComputers[1])
+            assertComputer(importedComputers[2]).isDataSame(expectedComputers[2])
+            assertComputer(importedComputers[3]).isDataSame(expectedComputers[3])
+        and:
+            observer.isNotified()
+    }
+
+
     def "should export some computers to txt file"() {
         given:
             def computers = [
@@ -344,13 +455,14 @@ class ComputerApiIntSpec extends Specification {
                             discReader: sampleDiscReader(value: "brak")
                     )
             ]
+            repository.addAll(computers)
+        and:
+            def computerId = computers[0].id
             String[] computerData = ["Fujitsu", "14\"", "1920x1080",
                                      "blyszczaca", "tak", "intel i7",
                                      "8", "1900", "24GB", "500GB",
                                      "HDD", "intel HD Graphics 520",
                                      "1GB", "brak systemu", "Blu-Ray"]
-            repository.addAll(computers)
-            def computerId = computers[0].id
             def command = new AddComputerAfterIdCommand(computerData, computerId)
         when:
             computerApi.add(command)
@@ -390,6 +502,7 @@ class ComputerApiIntSpec extends Specification {
                     discReader: sampleDiscReader(value: "Blu-Ray")
             )
             repository.add(computerToEdit)
+        and:
             def computerToEditId = computerToEdit.id
             String[] computerToEditData = [
                     "Fujitsu", "15\"", "1400x1080",
@@ -461,6 +574,7 @@ class ComputerApiIntSpec extends Specification {
                     )
             ]
             repository.addAll(computers)
+        and:
             def command = new RemoveComputerCommand(computers[0].id)
         when:
             computerApi.remove(command)
@@ -554,6 +668,7 @@ class ComputerApiIntSpec extends Specification {
                     discReader: sampleDiscReader(value: "Blu-Ray")
             )
             repository.add(computer)
+        and:
             def query = new GetComputerQuery(computer.id)
         when:
             def foundComputerData = computerApi.get(query)

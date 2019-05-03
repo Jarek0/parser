@@ -17,7 +17,7 @@ import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleScreen
 class TxtFileComputerParserSpec extends Specification {
 
     @Subject
-    TxtFileComputerParser parser = new TxtFileComputerParser()
+    def parser = new TxtFileComputerParser()
 
     def "should parse to computer when file content has single line without empty fields"() {
         given:
@@ -54,7 +54,7 @@ class TxtFileComputerParserSpec extends Specification {
             computers.size() == 1
             assertComputer(computers[0]).isDataSame(expectedComputer)
     }
-    
+
     def "should parse to file content when computers list has single computer"() {
         given:
             def computers = [
@@ -319,7 +319,7 @@ class TxtFileComputerParserSpec extends Specification {
             parser.parseFrom([sampleComputer()]) == ";;;;;;;;;;;;;;;"
     }
 
-    def "should parse to computer which has only empty fields when file content has miltple lines which contains only delimiters"() {
+    def "should parse to computers list which contains only computers with empty fields when file content has multiple lines which contains only delimiters"() {
         given:
             def fileContent = """\
                               ;;;;;;;;;;;;;;;
@@ -482,7 +482,7 @@ class TxtFileComputerParserSpec extends Specification {
             assertComputer(computers[0]).isDataSame(expectedComputer)
     }
 
-    def "should parse to computer when file content has single line which is not endend with delimiter"() {
+    def "should parse to computer when file content has single line which is not ended with delimiter"() {
         given:
             def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;24GB;500GB;HDD;intel HD Graphics 520;1GB;brak systemu"
         and:
