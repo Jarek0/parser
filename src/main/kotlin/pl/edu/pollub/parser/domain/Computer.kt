@@ -3,21 +3,14 @@ package pl.edu.pollub.parser.domain
 import java.util.*
 
 class Computer(
-        var manufacturer: String = DEFAULT_VALUE,
-        var matrixSize: String = DEFAULT_VALUE,
-        var resolution: String = DEFAULT_VALUE,
-        var matrixType: String = DEFAULT_VALUE,
-        var touchscreen: String = DEFAULT_VALUE,
-        var processor: String = DEFAULT_VALUE,
-        var coresCount: String = DEFAULT_VALUE,
-        var timing: String = DEFAULT_VALUE,
-        var ram: String = DEFAULT_VALUE,
-        var discCapacity: String = DEFAULT_VALUE,
-        var discType: String = DEFAULT_VALUE,
-        var graphicCard: String = DEFAULT_VALUE,
-        var graphicCardMemory: String = DEFAULT_VALUE,
-        var operationSystem: String = DEFAULT_VALUE,
-        var opticalDrive: String = DEFAULT_VALUE
+        var manufacturer: Manufacturer = Manufacturer(),
+        var screen: Screen = Screen(),
+        var processor: Processor = Processor(),
+        var ram: Ram = Ram(),
+        var disc: Disc = Disc(),
+        var graphicCard: GraphicCard = GraphicCard(),
+        var operationSystem: OperationSystem = OperationSystem(),
+        var discReader: DiscReader = DiscReader()
 ) {
     val id: ComputerId = ComputerId(UUID.randomUUID().toString())
 
@@ -38,6 +31,27 @@ class Computer(
 
 }
 
-data class ComputerId(val value: String)
+data class ComputerId(val value: String = DEFAULT_VALUE)
+
+data class Manufacturer(val value: String = DEFAULT_VALUE)
+
+data class Screen(val size: String = DEFAULT_VALUE,
+                  val resolution: String = DEFAULT_VALUE,
+                  val type: String = DEFAULT_VALUE,
+                  val touchscreen: String = DEFAULT_VALUE)
+
+data class Processor(val name: String = DEFAULT_VALUE,
+                     val physicalCores: String = DEFAULT_VALUE,
+                     val clockSpeed: String = DEFAULT_VALUE)
+
+data class Ram(val value: String = DEFAULT_VALUE)
+
+data class Disc(val storage: String = DEFAULT_VALUE, val type: String = DEFAULT_VALUE)
+
+data class GraphicCard(val name: String = DEFAULT_VALUE, val memory: String = DEFAULT_VALUE)
+
+data class OperationSystem(val value: String = DEFAULT_VALUE)
+
+data class DiscReader(val value: String = DEFAULT_VALUE)
 
 const val DEFAULT_VALUE = ""

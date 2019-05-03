@@ -13,6 +13,14 @@ import spock.lang.Subject
 
 import static pl.edu.pollub.parser.domain.assertions.ComputerAssert.assertComputer
 import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleComputer
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleDisc
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleDiscReader
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleGraphicCard
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleManufacturer
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleOperationSystem
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleProcessor
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleRam
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleScreen
 import static pl.edu.pollub.parser.utils.FileReader.readFile
 
 class ComputerApiIntSpec extends Specification {
@@ -54,76 +62,106 @@ class ComputerApiIntSpec extends Specification {
         and:
             def expectedComputers = [
                     sampleComputer(
-                            manufacturer: "Fujitsu",
-                            matrixSize: "14\"",
-                            resolution: "1920x1080",
-                            matrixType: "blyszczaca",
-                            touchscreen: "tak",
-                            processor: "intel i7",
-                            coresCount: 8,
-                            timing: 1900,
-                            ram: "24GB",
-                            discCapacity: "500GB",
-                            discType: "HDD",
-                            graphicCard: "intel HD Graphics 520",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "brak systemu",
-                            opticalDrive: "Blu-Ray"
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
                     ),
                     sampleComputer(
-                            manufacturer: "Huawei",
-                            matrixSize: "13\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2400",
-                            ram: "12GB",
-                            discCapacity: "24GB",
-                            discType: "HDD",
-                            graphicCard: "NVIDIA GeForce GTX 1050",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
                     ),
                     sampleComputer(
-                            manufacturer: "Dell",
-                            matrixSize: "12\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2800",
-                            ram: "8GB",
-                            discCapacity: "240GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 4000",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "Windows 7 Home"
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
                     ),
                     sampleComputer(
-                            manufacturer: "Asus",
-                            matrixSize: "14\"",
-                            resolution: "1600x900",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i5",
-                            coresCount: "4",
-                            ram: "16GB",
-                            discCapacity: "120GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 5000",
-                            graphicCardMemory: "1GB",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Asus"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1600x900",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i5",
+                                    physicalCores: "4",
+                            ),
+                            ram: sampleRam(value: "16GB"),
+                            disc: sampleDisc(
+                                    storage: "120GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 5000",
+                                    memory: "1GB",
+                            ),
+                            discReader: sampleDiscReader(value: "brak")
                     )
             ]
         when:
             computerApi.import(command)
         then:
-            def addedComputers = repository.getAll()
-            addedComputers.size() == 4
-            assertComputer(addedComputers[0]).isDataSame(expectedComputers[0])
-            assertComputer(addedComputers[1]).isDataSame(expectedComputers[1])
-            assertComputer(addedComputers[2]).isDataSame(expectedComputers[2])
-            assertComputer(addedComputers[3]).isDataSame(expectedComputers[3])
+            def importedComputers = repository.getAll()
+            importedComputers.size() == 4
+            assertComputer(importedComputers[0]).isDataSame(expectedComputers[0])
+            assertComputer(importedComputers[1]).isDataSame(expectedComputers[1])
+            assertComputer(importedComputers[2]).isDataSame(expectedComputers[2])
+            assertComputer(importedComputers[3]).isDataSame(expectedComputers[3])
         and:
             observer.isNotified()
     }
@@ -133,65 +171,95 @@ class ComputerApiIntSpec extends Specification {
         given:
             def computers = [
                     sampleComputer(
-                            manufacturer: "Fujitsu",
-                            matrixSize: "14\"",
-                            resolution: "1920x1080",
-                            matrixType: "blyszczaca",
-                            touchscreen: "tak",
-                            processor: "intel i7",
-                            coresCount: 8,
-                            timing: 1900,
-                            ram: "24GB",
-                            discCapacity: "500GB",
-                            discType: "HDD",
-                            graphicCard: "intel HD Graphics 520",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "brak systemu",
-                            opticalDrive: "Blu-Ray"
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
                     ),
                     sampleComputer(
-                            manufacturer: "Huawei",
-                            matrixSize: "13\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2400",
-                            ram: "12GB",
-                            discCapacity: "24GB",
-                            discType: "HDD",
-                            graphicCard: "NVIDIA GeForce GTX 1050",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
                     ),
                     sampleComputer(
-                            manufacturer: "Dell",
-                            matrixSize: "12\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2800",
-                            ram: "8GB",
-                            discCapacity: "240GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 4000",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "Windows 7 Home"
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
                     ),
                     sampleComputer(
-                            manufacturer: "Asus",
-                            matrixSize: "14\"",
-                            resolution: "1600x900",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i5",
-                            coresCount: "4",
-                            ram: "16GB",
-                            discCapacity: "120GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 5000",
-                            graphicCardMemory: "1GB",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Asus"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1600x900",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i5",
+                                    physicalCores: "4",
+                            ),
+                            ram: sampleRam(value: "16GB"),
+                            disc: sampleDisc(
+                                    storage: "120GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 5000",
+                                    memory: "1GB",
+                            ),
+                            discReader: sampleDiscReader(value: "brak")
                     )
             ]
         and:
@@ -220,9 +288,76 @@ class ComputerApiIntSpec extends Specification {
         when:
             computerApi.add(command)
         then:
-            def addedComputers = repository.getAll()
-            addedComputers.size() == 1
-            assertComputer(addedComputers[0]).hasData(computerData)
+            def existingComputers = repository.getAll()
+            existingComputers.size() == 1
+            assertComputer(existingComputers[0]).hasData(computerData)
+        and:
+            observer.isNotified()
+    }
+
+    def "should add computer after computer with id"() {
+        given:
+            def computers = [
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
+                    )
+            ]
+            String[] computerData = ["Fujitsu", "14\"", "1920x1080",
+                                     "blyszczaca", "tak", "intel i7",
+                                     "8", "1900", "24GB", "500GB",
+                                     "HDD", "intel HD Graphics 520",
+                                     "1GB", "brak systemu", "Blu-Ray"]
+            repository.addAll(computers)
+            def computerId = computers[0].id
+            def command = new AddComputerAfterIdCommand(computerData, computerId)
+        when:
+            computerApi.add(command)
+        then:
+            def existingComputers = repository.getAll()
+            existingComputers.size() == 3
+            assertComputer(existingComputers[1]).hasData(computerData)
         and:
             observer.isNotified()
     }
@@ -230,21 +365,29 @@ class ComputerApiIntSpec extends Specification {
     def "should edit computer"() {
         given:
             def computerToEdit = sampleComputer(
-                    manufacturer: "Fujitsu",
-                    matrixSize: "14\"",
-                    resolution: "1920x1080",
-                    matrixType: "blyszczaca",
-                    touchscreen: "tak",
-                    processor: "intel i7",
-                    coresCount: 8,
-                    timing: 1900,
-                    ram: "24GB",
-                    discCapacity: "500GB",
-                    discType: "HDD",
-                    graphicCard: "intel HD Graphics 520",
-                    graphicCardMemory: "1GB",
-                    operationSystem: "brak systemu",
-                    opticalDrive: "Blu-Ray"
+                    manufacturer: sampleManufacturer(value: "Fujitsu"),
+                    screen: sampleScreen(
+                            size: "14\"",
+                            resolution: "1920x1080",
+                            type: "blyszczaca",
+                            touchscreen: "tak"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "8",
+                            clockSpeed: "1900"
+                    ),
+                    ram: sampleRam(value: "24GB"),
+                    disc: sampleDisc(
+                            storage: "500GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(
+                            name: "intel HD Graphics 520",
+                            memory: "1GB",
+                    ),
+                    operationSystem: sampleOperationSystem(value: "brak systemu"),
+                    discReader: sampleDiscReader(value: "Blu-Ray")
             )
             repository.add(computerToEdit)
             def computerToEditId = computerToEdit.id
@@ -259,9 +402,9 @@ class ComputerApiIntSpec extends Specification {
         when:
             computerApi.edit(command)
         then:
-            def editedComputers = repository.getAll()
-            editedComputers.size() == 1
-            def editedComputer = editedComputers[0]
+            def existingComputers = repository.getAll()
+            existingComputers.size() == 1
+            def editedComputer = existingComputers[0]
             editedComputer.id == computerToEditId
             assertComputer(editedComputer).hasData(computerToEditData)
         and:
@@ -272,90 +415,143 @@ class ComputerApiIntSpec extends Specification {
         given:
             def computers = [
                     sampleComputer(
-                            manufacturer: "Fujitsu",
-                            matrixSize: "14\"",
-                            resolution: "1920x1080",
-                            matrixType: "blyszczaca",
-                            touchscreen: "tak",
-                            processor: "intel i7",
-                            coresCount: 8,
-                            timing: 1900,
-                            ram: "24GB",
-                            discCapacity: "500GB",
-                            discType: "HDD",
-                            graphicCard: "intel HD Graphics 520",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "brak systemu",
-                            opticalDrive: "Blu-Ray"
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
                     ),
                     sampleComputer(
-                            manufacturer: "Huawei",
-                            matrixSize: "13\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2400",
-                            ram: "12GB",
-                            discCapacity: "24GB",
-                            discType: "HDD",
-                            graphicCard: "NVIDIA GeForce GTX 1050",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
+                    )
+            ]
+            repository.addAll(computers)
+            def command = new RemoveComputerCommand(computers[0].id)
+        when:
+            computerApi.remove(command)
+        then:
+            def existingComputers = repository.getAll()
+            existingComputers.size() == 1
+    }
+
+    def "should remove all computers"() {
+        given:
+            def computers = [
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
                     )
             ]
             repository.addAll(computers)
         when:
             computerApi.removeAll()
         then:
-            def addedComputers = repository.getAll()
-            addedComputers.size() == 0
-    }
-
-    def "should remove all computers"() {
-        given:
-            def computer = sampleComputer(
-                    manufacturer: "Fujitsu",
-                    matrixSize: "14\"",
-                    resolution: "1920x1080",
-                    matrixType: "blyszczaca",
-                    touchscreen: "tak",
-                    processor: "intel i7",
-                    coresCount: 8,
-                    timing: 1900,
-                    ram: "24GB",
-                    discCapacity: "500GB",
-                    discType: "HDD",
-                    graphicCard: "intel HD Graphics 520",
-                    graphicCardMemory: "1GB",
-                    operationSystem: "brak systemu",
-                    opticalDrive: "Blu-Ray"
-            )
-            repository.add(computer)
-        when:
-            computerApi.removeAll()
-        then:
-            def computers = repository.getAll()
-            computers.size() == 0
+            def existingComputers = repository.getAll()
+            existingComputers.size() == 0
     }
 
     def "should get computer"() {
         given:
             def computer = sampleComputer(
-                    manufacturer: "Fujitsu",
-                    matrixSize: "14\"",
-                    resolution: "1920x1080",
-                    matrixType: "blyszczaca",
-                    touchscreen: "tak",
-                    processor: "intel i7",
-                    coresCount: 8,
-                    timing: 1900,
-                    ram: "24GB",
-                    discCapacity: "500GB",
-                    discType: "HDD",
-                    graphicCard: "intel HD Graphics 520",
-                    graphicCardMemory: "1GB",
-                    operationSystem: "brak systemu",
-                    opticalDrive: "Blu-Ray"
+                    manufacturer: sampleManufacturer(value: "Fujitsu"),
+                    screen: sampleScreen(
+                            size: "14\"",
+                            resolution: "1920x1080",
+                            type: "blyszczaca",
+                            touchscreen: "tak"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "8",
+                            clockSpeed: "1900"
+                    ),
+                    ram: sampleRam(value: "24GB"),
+                    disc: sampleDisc(
+                            storage: "500GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(
+                            name: "intel HD Graphics 520",
+                            memory: "1GB",
+                    ),
+                    operationSystem: sampleOperationSystem(value: "brak systemu"),
+                    discReader: sampleDiscReader(value: "Blu-Ray")
             )
             repository.add(computer)
             def query = new GetComputerQuery(computer.id)
@@ -369,65 +565,95 @@ class ComputerApiIntSpec extends Specification {
         given:
             def computers = [
                     sampleComputer(
-                            manufacturer: "Fujitsu",
-                            matrixSize: "14\"",
-                            resolution: "1920x1080",
-                            matrixType: "blyszczaca",
-                            touchscreen: "tak",
-                            processor: "intel i7",
-                            coresCount: 8,
-                            timing: 1900,
-                            ram: "24GB",
-                            discCapacity: "500GB",
-                            discType: "HDD",
-                            graphicCard: "intel HD Graphics 520",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "brak systemu",
-                            opticalDrive: "Blu-Ray"
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
                     ),
                     sampleComputer(
-                            manufacturer: "Huawei",
-                            matrixSize: "13\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2400",
-                            ram: "12GB",
-                            discCapacity: "24GB",
-                            discType: "HDD",
-                            graphicCard: "NVIDIA GeForce GTX 1050",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
                     ),
                     sampleComputer(
-                            manufacturer: "Dell",
-                            matrixSize: "12\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2800",
-                            ram: "8GB",
-                            discCapacity: "240GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 4000",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "Windows 7 Home"
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
                     ),
                     sampleComputer(
-                            manufacturer: "Asus",
-                            matrixSize: "14\"",
-                            resolution: "1600x900",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i5",
-                            coresCount: "4",
-                            ram: "16GB",
-                            discCapacity: "120GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 5000",
-                            graphicCardMemory: "1GB",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Asus"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1600x900",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i5",
+                                    physicalCores: "4",
+                            ),
+                            ram: sampleRam(value: "16GB"),
+                            disc: sampleDisc(
+                                    storage: "120GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 5000",
+                                    memory: "1GB",
+                            ),
+                            discReader: sampleDiscReader(value: "brak")
                     )
             ]
             repository.addAll(computers)

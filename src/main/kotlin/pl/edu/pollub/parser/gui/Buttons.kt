@@ -80,17 +80,23 @@ class ExportFileButton(private val api: ComputerApi, private val fileChooser: Fi
 }
 
 @Component
-class AddComputerButton(private val computerModal: ComputerModal) {
+class AddComputerButton(private val computerModal: ComputerModal, subject: ComputerSelectedSubject): ComputerSelectedObserver {
 
     val body: JButton = JButton(ADD_BUTTON_TEST)
+    var selectedComputer: ComputerId? = null
 
     init {
         body.preferredSize = Dimension(150, 30)
+        subject.subscribe(this)
         body.addActionListener { handleAddComputer() }
     }
 
+    override fun receive(event: ComputerSelectedEvent) {
+        selectedComputer = event.id
+    }
+
     private fun handleAddComputer() {
-        computerModal.addComputer()
+        computerModal.addComputer(selectedComputer)
     }
 }
 

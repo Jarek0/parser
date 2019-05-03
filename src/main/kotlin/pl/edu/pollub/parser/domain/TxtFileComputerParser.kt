@@ -1,7 +1,7 @@
 package pl.edu.pollub.parser.domain
 
 import pl.edu.pollub.dependencyinjection.Component
-import pl.edu.pollub.parser.application.convert
+import pl.edu.pollub.parser.application.ComputerConverters.Companion.convert
 import java.lang.StringBuilder
 
 @Component
@@ -27,11 +27,14 @@ class TxtFileComputerParser: ComputerFileParser {
     }
 
     private fun parseSingle(c: Computer): String {
-        return "${c.manufacturer}$DELIMITER${c.matrixSize}$DELIMITER${c.resolution}$DELIMITER" +
-                "${c.matrixType}$DELIMITER${c.touchscreen}$DELIMITER${c.processor}$DELIMITER" +
-                "${c.coresCount}$DELIMITER${c.timing}$DELIMITER${c.ram}$DELIMITER" +
-                "${c.discCapacity}$DELIMITER${c.discType}$DELIMITER${c.graphicCard}$DELIMITER" +
-                "${c.graphicCardMemory}$DELIMITER${c.operationSystem}$DELIMITER${c.opticalDrive}$DELIMITER"
+        return "${c.manufacturer.value}$DELIMITER" +
+                "${c.screen.size}$DELIMITER${c.screen.resolution}$DELIMITER${c.screen.type}$DELIMITER${c.screen.touchscreen}$DELIMITER" +
+                "${c.processor.name}$DELIMITER${c.processor.physicalCores}$DELIMITER${c.processor.clockSpeed}$DELIMITER" +
+                "${c.ram.value}$DELIMITER" +
+                "${c.disc.storage}$DELIMITER${c.disc.type}$DELIMITER" +
+                "${c.graphicCard.name}$DELIMITER${c.graphicCard.memory}$DELIMITER" +
+                "${c.operationSystem.value}$DELIMITER" +
+                "${c.discReader.value}$DELIMITER"
     }
 
     private fun Collection<Computer>.isNotLast(o: Computer): Boolean {

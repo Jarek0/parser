@@ -1,6 +1,7 @@
 package pl.edu.pollub.parser.application
 
 import pl.edu.pollub.dependencyinjection.Component
+import pl.edu.pollub.parser.application.ComputerConverters.Companion.convert
 import pl.edu.pollub.parser.domain.*
 import java.io.File
 
@@ -34,6 +35,17 @@ class ComputerService(
         computerRepository.add(computer)
         computersChangedSubject.notifyObservers()
     }
+
+    fun add(computerToAddData: ComputerTableRow, computerId: ComputerId) {
+        val computer = convert(computerToAddData)
+        val computers = computerRepository.getAll().toMutableList()
+        computers.add(computers.findIndexById(computerId) + 1, computer)
+        computerRepository.removeAll()
+        computerRepository.addAll(computers)
+        computersChangedSubject.notifyObservers()
+    }
+
+    private fun MutableList<Computer>.findIndexById(computerId: ComputerId) = indexOf(first { it.id == computerId })
 
     fun edit(id: ComputerId, computerToEditData: ComputerTableRow) {
         val computerToEdit = computerRepository.getById(id)

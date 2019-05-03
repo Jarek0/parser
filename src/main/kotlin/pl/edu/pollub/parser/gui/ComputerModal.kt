@@ -35,10 +35,10 @@ class ComputerModal(private val api: ComputerApi, mainFrame: MainFrame) {
         }
     }
 
-    fun addComputer() {
+    fun addComputer(computerId: ComputerId?) {
         dialog.title = ADD_COMPUTER_TITLE
         okButton.removeAllActionListeners()
-        okButton.addActionListener { handleAddComputer() }
+        okButton.addActionListener { handleAddComputer(computerId) }
         dialog.isVisible = true
     }
 
@@ -55,9 +55,12 @@ class ComputerModal(private val api: ComputerApi, mainFrame: MainFrame) {
         actionListeners.forEach { removeActionListener(it) }
     }
 
-    private fun handleAddComputer() {
+    private fun handleAddComputer(computerId: ComputerId?) {
         val addedComputer = computerFields.toComputerData()
-        api.add(AddComputerCommand(addedComputer))
+        when {
+            computerId == null -> api.add(AddComputerCommand(addedComputer))
+            else -> api.add(AddComputerAfterIdCommand(addedComputer, computerId))
+        }
         close()
     }
 

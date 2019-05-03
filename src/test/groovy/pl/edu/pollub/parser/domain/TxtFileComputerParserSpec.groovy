@@ -5,6 +5,14 @@ import spock.lang.Subject
 
 import static pl.edu.pollub.parser.domain.assertions.ComputerAssert.assertComputer
 import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleComputer
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleDisc
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleDiscReader
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleGraphicCard
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleManufacturer
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleOperationSystem
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleProcessor
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleRam
+import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleScreen
 
 class TxtFileComputerParserSpec extends Specification {
 
@@ -16,21 +24,29 @@ class TxtFileComputerParserSpec extends Specification {
             def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;24GB;500GB;HDD;intel HD Graphics 520;1GB;brak systemu;Blu-Ray;"
         and:
             def expectedComputer = sampleComputer(
-                    manufacturer: "Fujitsu",
-                    matrixSize: "14\"",
-                    resolution: "1920x1080",
-                    matrixType: "blyszczaca",
-                    touchscreen: "tak",
-                    processor: "intel i7",
-                    coresCount: "8",
-                    timing: "1900",
-                    ram: "24GB",
-                    discCapacity: "500GB",
-                    discType: "HDD",
-                    graphicCard: "intel HD Graphics 520",
-                    graphicCardMemory: "1GB",
-                    operationSystem: "brak systemu",
-                    opticalDrive: "Blu-Ray"
+                    manufacturer: sampleManufacturer(value: "Fujitsu"),
+                    screen: sampleScreen(
+                            size: "14\"",
+                            resolution: "1920x1080",
+                            type: "blyszczaca",
+                            touchscreen: "tak"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "8",
+                            clockSpeed: "1900"
+                    ),
+                    ram: sampleRam(value: "24GB"),
+                    disc: sampleDisc(
+                            storage: "500GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(
+                            name: "intel HD Graphics 520",
+                            memory: "1GB",
+                    ),
+                    operationSystem: sampleOperationSystem(value: "brak systemu"),
+                    discReader: sampleDiscReader(value: "Blu-Ray")
             )
         when:
             def computers = parser.parseFrom(fileContent)
@@ -43,21 +59,29 @@ class TxtFileComputerParserSpec extends Specification {
         given:
             def computers = [
                     sampleComputer(
-                            manufacturer: "Fujitsu",
-                            matrixSize: "14\"",
-                            resolution: "1920x1080",
-                            matrixType: "blyszczaca",
-                            touchscreen: "tak",
-                            processor: "intel i7",
-                            coresCount: "8",
-                            timing: "1900",
-                            ram: "24GB",
-                            discCapacity: "500GB",
-                            discType: "HDD",
-                            graphicCard: "intel HD Graphics 520",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "brak systemu",
-                            opticalDrive: "Blu-Ray"
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
                     )
             ]
         and:
@@ -73,18 +97,24 @@ class TxtFileComputerParserSpec extends Specification {
             def fileContent = "Huawei;13\";;matowa;nie;intel i7;4;2400;12GB;24GB;HDD;NVIDIA GeForce GTX 1050;;;brak;"
         and:
             def expectedComputer = sampleComputer(
-                    manufacturer: "Huawei",
-                    matrixSize: "13\"",
-                    matrixType: "matowa",
-                    touchscreen: "nie",
-                    processor: "intel i7",
-                    coresCount: "4",
-                    timing: "2400",
-                    ram: "12GB",
-                    discCapacity: "24GB",
-                    discType: "HDD",
-                    graphicCard: "NVIDIA GeForce GTX 1050",
-                    opticalDrive: "brak"
+                    manufacturer: sampleManufacturer(value: "Huawei"),
+                    screen: sampleScreen(
+                            size: "13\"",
+                            type: "matowa",
+                            touchscreen: "nie"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "4",
+                            clockSpeed: "2400"
+                    ),
+                    ram: sampleRam(value: "12GB"),
+                    disc: sampleDisc(
+                            storage: "24GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                    discReader: sampleDiscReader(value: "brak")
             )
         when:
             def computers = parser.parseFrom(fileContent)
@@ -97,18 +127,24 @@ class TxtFileComputerParserSpec extends Specification {
         given:
             def computers = [
                     sampleComputer(
-                            manufacturer: "Huawei",
-                            matrixSize: "13\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2400",
-                            ram: "12GB",
-                            discCapacity: "24GB",
-                            discType: "HDD",
-                            graphicCard: "NVIDIA GeForce GTX 1050",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
                     )
             ]
         and:
@@ -128,34 +164,50 @@ class TxtFileComputerParserSpec extends Specification {
         and:
             def expectedComputers = [
                     sampleComputer(
-                            manufacturer: "Dell",
-                            matrixSize: "12\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2800",
-                            ram: "8GB",
-                            discCapacity: "240GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 4000",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "Windows 7 Home"
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
                     ),
                     sampleComputer(
-                            manufacturer: "Asus",
-                            matrixSize: "14\"",
-                            resolution: "1600x900",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i5",
-                            coresCount: "4",
-                            ram: "16GB",
-                            discCapacity: "120GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 5000",
-                            graphicCardMemory: "1GB",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Asus"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1600x900",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i5",
+                                    physicalCores: "4",
+                            ),
+                            ram: sampleRam(value: "16GB"),
+                            disc: sampleDisc(
+                                    storage: "120GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 5000",
+                                    memory: "1GB",
+                            ),
+                            discReader: sampleDiscReader(value: "brak")
                     )
             ]
         when:
@@ -170,34 +222,50 @@ class TxtFileComputerParserSpec extends Specification {
         given:
             def computers = [
                     sampleComputer(
-                            manufacturer: "Dell",
-                            matrixSize: "12\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2800",
-                            ram: "8GB",
-                            discCapacity: "240GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 4000",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "Windows 7 Home"
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
                     ),
                     sampleComputer(
-                            manufacturer: "Asus",
-                            matrixSize: "14\"",
-                            resolution: "1600x900",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i5",
-                            coresCount: "4",
-                            ram: "16GB",
-                            discCapacity: "120GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 5000",
-                            graphicCardMemory: "1GB",
-                            opticalDrive: "brak"
+                            manufacturer: sampleManufacturer(value: "Asus"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1600x900",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i5",
+                                    physicalCores: "4",
+                            ),
+                            ram: sampleRam(value: "16GB"),
+                            disc: sampleDisc(
+                                    storage: "120GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 5000",
+                                    memory: "1GB",
+                            ),
+                            discReader: sampleDiscReader(value: "brak")
                     )
             ]
         and:
@@ -280,18 +348,26 @@ class TxtFileComputerParserSpec extends Specification {
             def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;null;500GB;HDD;intel HD Graphics 520;"
         and:
             def expectedComputer = sampleComputer(
-                    manufacturer: "Fujitsu",
-                    matrixSize: "14\"",
-                    resolution: "1920x1080",
-                    matrixType: "blyszczaca",
-                    touchscreen: "tak",
-                    processor: "intel i7",
-                    coresCount: "8",
-                    timing: "1900",
-                    ram: "null",
-                    discCapacity: "500GB",
-                    discType: "HDD",
-                    graphicCard: "intel HD Graphics 520"
+                    manufacturer: sampleManufacturer(value: "Fujitsu"),
+                    screen: sampleScreen(
+                            size: "14\"",
+                            resolution: "1920x1080",
+                            type: "blyszczaca",
+                            touchscreen: "tak"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "8",
+                            clockSpeed: "1900"
+                    ),
+                    ram: sampleRam(value: "null"),
+                    disc: sampleDisc(
+                            storage: "500GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(
+                            name: "intel HD Graphics 520",
+                    )
             )
         when:
             def parsed = parser.parseFrom(fileContent)
@@ -312,38 +388,54 @@ class TxtFileComputerParserSpec extends Specification {
             computers.size() == 2
     }
 
-    def "should parse to multiline file content witch conteins two identical lines when computers list has two identical computers"() {
+    def "should parse to multiline file content witch contains two identical lines when computers list has two identical computers"() {
         given:
             def computers = [
                     sampleComputer(
-                            manufacturer: "Dell",
-                            matrixSize: "12\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2800",
-                            ram: "8GB",
-                            discCapacity: "240GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 4000",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "Windows 7 Home"
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
                     ),
                     sampleComputer(
-                            manufacturer: "Dell",
-                            matrixSize: "12\"",
-                            matrixType: "matowa",
-                            touchscreen: "nie",
-                            processor: "intel i7",
-                            coresCount: "4",
-                            timing: "2800",
-                            ram: "8GB",
-                            discCapacity: "240GB",
-                            discType: "SSD",
-                            graphicCard: "intel HD Graphics 4000",
-                            graphicCardMemory: "1GB",
-                            operationSystem: "Windows 7 Home"
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
                     )
             ]
         and:
@@ -359,82 +451,106 @@ class TxtFileComputerParserSpec extends Specification {
 
     def "should parse to computer with empty fields when file content has single file which has less fields count than expected"() {
         given:
-        def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;24GB;500GB;HDD;intel HD Graphics 520;"
+            def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;24GB;500GB;HDD;intel HD Graphics 520;"
         and:
-        def expectedComputer = sampleComputer(
-                manufacturer: "Fujitsu",
-                matrixSize: "14\"",
-                resolution: "1920x1080",
-                matrixType: "blyszczaca",
-                touchscreen: "tak",
-                processor: "intel i7",
-                coresCount: "8",
-                timing: "1900",
-                ram: "24GB",
-                discCapacity: "500GB",
-                discType: "HDD",
-                graphicCard: "intel HD Graphics 520"
-        )
+            def expectedComputer = sampleComputer(
+                    manufacturer: sampleManufacturer(value: "Fujitsu"),
+                    screen: sampleScreen(
+                            size: "14\"",
+                            resolution: "1920x1080",
+                            type: "blyszczaca",
+                            touchscreen: "tak"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "8",
+                            clockSpeed: "1900"
+                    ),
+                    ram: sampleRam(value: "24GB"),
+                    disc: sampleDisc(
+                            storage: "500GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(
+                            name: "intel HD Graphics 520",
+                    )
+            )
         when:
-        def computers = parser.parseFrom(fileContent)
+            def computers = parser.parseFrom(fileContent)
         then:
-        computers.size() == 1
-        assertComputer(computers[0]).isDataSame(expectedComputer)
+            computers.size() == 1
+            assertComputer(computers[0]).isDataSame(expectedComputer)
     }
 
     def "should parse to computer when file content has single line which is not endend with delimiter"() {
         given:
-        def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;24GB;500GB;HDD;intel HD Graphics 520;1GB;brak systemu"
+            def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;24GB;500GB;HDD;intel HD Graphics 520;1GB;brak systemu"
         and:
-        def expectedComputer = sampleComputer(
-                manufacturer: "Fujitsu",
-                matrixSize: "14\"",
-                resolution: "1920x1080",
-                matrixType: "blyszczaca",
-                touchscreen: "tak",
-                processor: "intel i7",
-                coresCount: "8",
-                timing: "1900",
-                ram: "24GB",
-                discCapacity: "500GB",
-                discType: "HDD",
-                graphicCard: "intel HD Graphics 520",
-                graphicCardMemory: "1GB",
-                operationSystem: "brak systemu"
-        )
+            def expectedComputer = sampleComputer(
+                    manufacturer: sampleManufacturer(value: "Fujitsu"),
+                    screen: sampleScreen(
+                            size: "14\"",
+                            resolution: "1920x1080",
+                            type: "blyszczaca",
+                            touchscreen: "tak"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "8",
+                            clockSpeed: "1900"
+                    ),
+                    ram: sampleRam(value: "24GB"),
+                    disc: sampleDisc(
+                            storage: "500GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(
+                            name: "intel HD Graphics 520",
+                            memory: "1GB"
+                    ),
+                    operationSystem: sampleOperationSystem(value: "brak systemu")
+            )
         when:
-        def computers = parser.parseFrom(fileContent)
+            def computers = parser.parseFrom(fileContent)
         then:
-        computers.size() == 1
-        assertComputer(computers[0]).isDataSame(expectedComputer)
+            computers.size() == 1
+            assertComputer(computers[0]).isDataSame(expectedComputer)
     }
 
     def "should parse to computer with empty fields when file content has single file which has more fields count than expected"() {
         given:
-        def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;24GB;500GB;HDD;intel HD Graphics 520;1GB;brak systemu;Blu-Ray;additionalField;additionalField;"
+            def fileContent = "Fujitsu;14\";1920x1080;blyszczaca;tak;intel i7;8;1900;24GB;500GB;HDD;intel HD Graphics 520;1GB;brak systemu;Blu-Ray;additionalField;additionalField;"
         and:
-        def expectedComputer = sampleComputer(
-                manufacturer: "Fujitsu",
-                matrixSize: "14\"",
-                resolution: "1920x1080",
-                matrixType: "blyszczaca",
-                touchscreen: "tak",
-                processor: "intel i7",
-                coresCount: "8",
-                timing: "1900",
-                ram: "24GB",
-                discCapacity: "500GB",
-                discType: "HDD",
-                graphicCard: "intel HD Graphics 520",
-                graphicCardMemory: "1GB",
-                operationSystem: "brak systemu",
-                opticalDrive: "Blu-Ray"
-        )
+            def expectedComputer = sampleComputer(
+                    manufacturer: sampleManufacturer(value: "Fujitsu"),
+                    screen: sampleScreen(
+                            size: "14\"",
+                            resolution: "1920x1080",
+                            type: "blyszczaca",
+                            touchscreen: "tak"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "8",
+                            clockSpeed: "1900"
+                    ),
+                    ram: sampleRam(value: "24GB"),
+                    disc: sampleDisc(
+                            storage: "500GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(
+                            name: "intel HD Graphics 520",
+                            memory: "1GB",
+                    ),
+                    operationSystem: sampleOperationSystem(value: "brak systemu"),
+                    discReader: sampleDiscReader(value: "Blu-Ray")
+            )
         when:
-        def computers = parser.parseFrom(fileContent)
+            def computers = parser.parseFrom(fileContent)
         then:
-        computers.size() == 1
-        assertComputer(computers[0]).isDataSame(expectedComputer)
+            computers.size() == 1
+            assertComputer(computers[0]).isDataSame(expectedComputer)
     }
 
 }

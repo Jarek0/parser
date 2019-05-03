@@ -46,9 +46,15 @@ class ComputersTable(private val api: ComputerApi,
 }
 
 val COLUMNS = arrayOf(
-        "Id", "Manufacturer", "Matrix Size", "Resolution", "Matrix Type", "Touchscreen",
-        "Processor", "Cores Count", "Timing", "RAM", "Disc Capacity", "Disc Type",
-        "Graphic Card", "Graphic Card Memory", "Operation System", "Optical Drive"
+        "Id",
+        "Manufacturer",
+        "Screen Size", "Screen Resolution", "Screen Type", "Screen Touchscreen",
+        "Processor Name", "Processor Physical cores", "Processor Clock Speed",
+        "RAM",
+        "Disc Storage", "Disc Type",
+        "Graphic Card Name", "Graphic Card Memory",
+        "Operation System",
+        "Optical Drive"
 )
 
 @Component

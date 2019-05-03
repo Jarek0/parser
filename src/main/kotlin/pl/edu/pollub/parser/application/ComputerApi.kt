@@ -1,6 +1,7 @@
 package pl.edu.pollub.parser.application
 
 import pl.edu.pollub.dependencyinjection.Component
+import pl.edu.pollub.parser.application.ComputerConverters.Companion.convert
 import java.io.File
 
 @Component
@@ -16,6 +17,10 @@ class ComputerApi(private val computerService: ComputerService) {
 
     fun add(command: AddComputerCommand) {
         computerService.add(command.computerToAddData)
+    }
+
+    fun add(command: AddComputerAfterIdCommand) {
+        computerService.add(command.computerToAddData, command.computerId)
     }
 
     fun edit(command: EditComputerCommand) {
