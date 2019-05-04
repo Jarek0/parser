@@ -1,6 +1,8 @@
 package pl.edu.pollub.parser.domain.xml
 
 import pl.edu.pollub.parser.domain.*
+import pl.edu.pollub.parser.domain.csv.appendNextLine
+import pl.edu.pollub.parser.domain.csv.appendNextLines
 import java.lang.StringBuilder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -97,37 +99,22 @@ private fun String.parseOperationSystem() = OperationSystem(parseTag(Tag.OPERATI
 private fun String.parseDiscReader() = DiscReader(parseTag(Tag.DISC_READER))
 
 fun StringBuilder.appendStartTag(tag: Tag) {
-    appendNextLines(tag.level.spacesCount)
-    appendTabs(tag.level.tabsCount)
+    tag.level.appendStartTag(this)
     append(tag.start)
 }
 
 fun StringBuilder.appendTagValue(tag: Tag, value: String) {
-    if(tag.isComplexField()) {
-        appendNextLine()
-        appendTabs(tag.level.tabsCount)
-    }
+    tag.level.appendTagValue(this)
     append(value)
 }
 
 fun StringBuilder.appendEndTag(tag: Tag) {
-    if(tag.isComplexField()) {
-        when(tag.level) {
-            TagLevel.MAIN -> appendNextLines(2)
-            TagLevel.ELEMENT -> appendNextLines(tag.level.spacesCount)
-            else -> appendNextLine()
-        }
-        appendTabs(tag.level.tabsCount)
-    }
+    tag.level.appendEndTag(this)
     append(tag.end)
 }
 
 fun StringBuilder.appendTabs(count: Int) {
     (0 until count).fold(this){ _, _ -> append("\t") }
-}
-
-fun StringBuilder.appendTab() {
-    append(System.getProperty("\t"))
 }
 
 class TagMatcher(private val string: String, tag: Tag) {

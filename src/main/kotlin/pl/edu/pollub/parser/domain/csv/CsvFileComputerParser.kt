@@ -1,11 +1,9 @@
-package pl.edu.pollub.parser.domain
+package pl.edu.pollub.parser.domain.csv
 
 import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.application.ComputerConverters.Companion.convert
-import pl.edu.pollub.parser.domain.xml.ComplexField
-import pl.edu.pollub.parser.domain.xml.SimpleField
-import pl.edu.pollub.parser.domain.xml.Tag
-import pl.edu.pollub.parser.domain.xml.appendTabs
+import pl.edu.pollub.parser.domain.Computer
+import pl.edu.pollub.parser.domain.ComputerFileParser
 import java.lang.StringBuilder
 
 @Component

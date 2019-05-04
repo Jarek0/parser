@@ -12,7 +12,7 @@ class XmlAssert {
     private boolean nodeTypeDiff = true
     private boolean nodeValueDiff = true
 
-    boolean diff(String actual, String expected, List<String> diffs = new ArrayList<>()) throws Exception {
+    void diff(String actual, String expected, List<String> diffs = new ArrayList<>()) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance()
         dbf.setNamespaceAware(true)
         dbf.setCoalescing(true)
@@ -27,7 +27,9 @@ class XmlAssert {
         doc1.normalizeDocument()
         doc2.normalizeDocument()
 
-        return diff(doc1, doc2, diffs)
+        diff(doc1, doc2, diffs)
+
+        assert diffs == []
     }
 
     boolean diff(Node node1, Node node2, List<String> diffs) throws Exception {

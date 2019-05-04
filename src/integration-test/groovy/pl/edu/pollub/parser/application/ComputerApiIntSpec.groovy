@@ -495,7 +495,7 @@ class ComputerApiIntSpec extends Specification {
         when:
             def resultFile = computerApi.export(command)
         then:
-            !xmlAssert.diff(resultFile.getText(), expectedContent)
+            xmlAssert.diff(resultFile.getText(), expectedContent)
             resultFile.name == fileHint.name
             resultFile.path == fileHint.path
     }

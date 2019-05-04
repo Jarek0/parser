@@ -1,6 +1,7 @@
 package pl.edu.pollub.parser.domain
 
 import pl.edu.pollub.dependencyinjection.Component
+import pl.edu.pollub.parser.domain.csv.TxtFileComputerParser
 import pl.edu.pollub.parser.domain.xml.XmlFileComputerParser
 
 @Component

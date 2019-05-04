@@ -1,5 +1,7 @@
 package pl.edu.pollub.parser.domain.xml
 
+import pl.edu.pollub.parser.domain.csv.appendNextLine
+import pl.edu.pollub.parser.domain.csv.appendNextLines
 import java.lang.StringBuilder
 
 enum class Tag(val start: String, val end: String, val level: TagLevel = TagLevel.SUB_FIELD) {
@@ -28,11 +30,41 @@ enum class Tag(val start: String, val end: String, val level: TagLevel = TagLeve
 }
 
 enum class TagLevel(val tabsCount: Int, val spacesCount: Int) {
-    MAIN(0, 0),
-    ELEMENT(1, 2),
-    COMPLEX_FIELD(2, 2),
-    SIMPLE_FIELD(2, 2),
-    SUB_FIELD(3, 1)
+    MAIN(0, 0) {
+        override fun appendEndTag(builder: StringBuilder) {
+            builder.appendNextLines(2)
+        }
+    },
+    ELEMENT(1, 2) {
+        override fun appendEndTag(builder: StringBuilder) {
+            builder.appendNextLines(spacesCount)
+            builder.appendTabs(tabsCount)
+        }
+    },
+    COMPLEX_FIELD(2, 2) {
+        override fun appendEndTag(builder: StringBuilder) {
+            builder.appendNextLine()
+            builder.appendTabs(tabsCount)
+        }
+    },
+    SIMPLE_FIELD(2, 2) {
+        override fun appendTagValue(builder: StringBuilder) {}
+    },
+    SUB_FIELD(3, 1) {
+        override fun appendTagValue(builder: StringBuilder) {}
+    };
+
+    fun appendStartTag(builder: StringBuilder) {
+        builder.appendNextLines(spacesCount)
+        builder.appendTabs(tabsCount)
+    }
+
+    open fun appendTagValue(builder: StringBuilder) {
+        builder.appendNextLine()
+        builder.appendTabs(tabsCount)
+    }
+
+    open fun appendEndTag(builder: StringBuilder) {}
 }
 
 abstract class TagValue(open val builder: StringBuilder, open val tag: Tag) {

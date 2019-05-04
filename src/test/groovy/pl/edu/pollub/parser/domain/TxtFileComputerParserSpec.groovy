@@ -1,5 +1,6 @@
 package pl.edu.pollub.parser.domain
 
+import pl.edu.pollub.parser.domain.csv.TxtFileComputerParser
 import spock.lang.Specification
 import spock.lang.Subject
 

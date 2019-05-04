@@ -148,7 +148,7 @@ class XmlFileComputersParserSpec extends Specification {
         when:
             def fileContent = parser.parseFrom(computers)
         then:
-            !xmlAssert.diff(expectedFileContent, fileContent)
+            xmlAssert.diff(expectedFileContent, fileContent)
     }
 
     def "should parse to computer when file content has single computer with broken sub fields"() {
@@ -633,7 +633,7 @@ class XmlFileComputersParserSpec extends Specification {
         when:
             def fileContent = parser.parseFrom(computers)
         then:
-            !xmlAssert.diff(expectedFileContent, fileContent)
+            xmlAssert.diff(expectedFileContent, fileContent)
     }
 
     def "should parse to computer when file content has single computer with missing simple fields"() {
@@ -757,7 +757,7 @@ class XmlFileComputersParserSpec extends Specification {
         when:
             def fileContent = parser.parseFrom(computers)
         then:
-            !xmlAssert.diff(expectedFileContent, fileContent)
+            xmlAssert.diff(expectedFileContent, fileContent)
     }
 
     def "should parse to computer when file content has single computer with missing complex fields"() {
@@ -869,7 +869,7 @@ class XmlFileComputersParserSpec extends Specification {
         when:
             def fileContent = parser.parseFrom(computers)
         then:
-            !xmlAssert.diff(expectedFileContent, fileContent)
+            xmlAssert.diff(expectedFileContent, fileContent)
     }
 
     def "should parse to computer when file content has single computer with mixed sub fields"() {
@@ -1433,7 +1433,7 @@ class XmlFileComputersParserSpec extends Specification {
         when:
             def fileContent = parser.parseFrom(computers)
         then:
-            !xmlAssert.diff(fileContent, expectedFileContent)
+            xmlAssert.diff(fileContent, expectedFileContent)
     }
 
     def "should parse to empty computers list when file content is empty"() {
