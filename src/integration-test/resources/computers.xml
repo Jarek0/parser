@@ -3,7 +3,7 @@
 	<laptop>
 
 		<manufacturer>Fujitsu</manufacturer>
-	
+
 		<screen>
 			<size>14"</size>
 			<resolution>1920x1080</resolution>
@@ -16,23 +16,23 @@
 			<physical_cores>8</physical_cores>
 			<clock_speed>1900</clock_speed>
 		</processor>
-		
+
 		<ram>24GB</ram>
-		
+
 		<disc>
 			<storage>500GB</storage>
 			<type>HDD</type>
 		</disc>
-		
+
 		<graphic_card>
 			<name>intel HD Graphics 520</name>
 			<memory>1GB</memory>
 		</graphic_card>
-		
+
 		<os>brak systemu</os>
-		
+
 		<disc_reader>Blu-Ray</disc_reader>
-		
+
 	</laptop>
 
 	<laptop>
@@ -129,5 +129,5 @@
 		<disc_reader>brak</disc_reader>
 
 	</laptop>
-	
+
 </laptops>
