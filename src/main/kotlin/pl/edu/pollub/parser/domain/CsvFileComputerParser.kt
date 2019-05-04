@@ -2,6 +2,10 @@ package pl.edu.pollub.parser.domain
 
 import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.application.ComputerConverters.Companion.convert
+import pl.edu.pollub.parser.domain.xml.ComplexField
+import pl.edu.pollub.parser.domain.xml.SimpleField
+import pl.edu.pollub.parser.domain.xml.Tag
+import pl.edu.pollub.parser.domain.xml.appendTabs
 import java.lang.StringBuilder
 
 @Component
@@ -15,8 +19,10 @@ class TxtFileComputerParser: ComputerFileParser {
         val builder = StringBuilder()
         for(computer in computers) {
             val parsedComputer = parseSingle((computer))
-            builder.append(parsedComputer)
-            if(computers.isNotLast(computer)) builder.append(System.getProperty("line.separator"))
+            when {
+                computers.isFirst(computer) -> builder.append(parsedComputer)
+                else -> builder.appendNextLine(parsedComputer)
+            }
         }
         return builder.toString()
     }
@@ -37,10 +43,20 @@ class TxtFileComputerParser: ComputerFileParser {
                 "${c.discReader.value}$DELIMITER"
     }
 
-    private fun Collection<Computer>.isNotLast(o: Computer): Boolean {
-        return indexOf(o) < size - 1
+    private fun Collection<Computer>.isFirst(o: Computer): Boolean {
+        return indexOf(o) == 1
     }
 
 }
 
 const val DELIMITER = ";"
+
+fun StringBuilder.appendNextLines(count: Int, value: String? = null) {
+    (0 until count).fold(this){ _, _ -> append(System.getProperty("line.separator")) }
+    if(value != null) append(value)
+}
+
+fun StringBuilder.appendNextLine(value: String? = null) {
+    append(System.getProperty("line.separator"))
+    if(value != null) append(value)
+}

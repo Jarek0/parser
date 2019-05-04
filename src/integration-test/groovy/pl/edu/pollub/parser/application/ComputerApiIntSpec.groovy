@@ -8,6 +8,7 @@ import pl.edu.pollub.parser.Application
 import pl.edu.pollub.parser.domain.ComputerRepository
 import pl.edu.pollub.parser.domain.ComputersChangedObserver
 import pl.edu.pollub.parser.domain.ComputersChangedSubject
+import pl.edu.pollub.parser.domain.assertions.XmlAssert
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -27,6 +28,8 @@ class ComputerApiIntSpec extends Specification {
 
     @Rule
     TemporaryFolder temporaryFolder = new TemporaryFolder()
+
+    XmlAssert xmlAssert = new XmlAssert()
 
     ComputerRepository repository
 
@@ -58,7 +61,7 @@ class ComputerApiIntSpec extends Specification {
 
     def "should import txt file with some computers"() {
         given:
-            def command = new ImportFileCommand(readFile("computers.txt"))
+            def command = new ImportFileCommand(readFile("computers.csv"))
         and:
             def expectedComputers = [
                     sampleComputer(
@@ -277,7 +280,6 @@ class ComputerApiIntSpec extends Specification {
             observer.isNotified()
     }
 
-
     def "should export some computers to txt file"() {
         given:
             def computers = [
@@ -376,7 +378,7 @@ class ComputerApiIntSpec extends Specification {
         and:
             repository.addAll(computers)
         and:
-            def expectedContent = readFile("computers.txt").getText()
+            def expectedContent = readFile("computers.csv").getText()
         and:
             def fileHint = temporaryFolder.newFile("exportedComputers.txt")
             def command = new ExportFileQuery(fileHint)
@@ -384,6 +386,116 @@ class ComputerApiIntSpec extends Specification {
             def resultFile = computerApi.export(command)
         then:
             resultFile.getText() == expectedContent
+            resultFile.name == fileHint.name
+            resultFile.path == fileHint.path
+    }
+
+    def "should export some computers to xml file"() {
+        given:
+            def computers = [
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Asus"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1600x900",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i5",
+                                    physicalCores: "4",
+                            ),
+                            ram: sampleRam(value: "16GB"),
+                            disc: sampleDisc(
+                                    storage: "120GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 5000",
+                                    memory: "1GB",
+                            ),
+                            discReader: sampleDiscReader(value: "brak")
+                    )
+            ]
+        and:
+            repository.addAll(computers)
+        and:
+            def expectedContent = readFile("computers.xml").getText()
+        and:
+            def fileHint = temporaryFolder.newFile("exportedComputers.xml")
+            def command = new ExportFileQuery(fileHint)
+        when:
+            def resultFile = computerApi.export(command)
+        then:
+            !xmlAssert.diff(resultFile.getText(), expectedContent)
             resultFile.name == fileHint.name
             resultFile.path == fileHint.path
     }

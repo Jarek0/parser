@@ -1,21 +1,9 @@
-package pl.edu.pollub.parser.domain
+package pl.edu.pollub.parser.domain.xml
 
-import pl.edu.pollub.dependencyinjection.Component
+import pl.edu.pollub.parser.domain.*
+import java.lang.StringBuilder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-
-@Component
-class XmlFileComputerParser: ComputerFileParser {
-
-    override fun parseFrom(fileContent: String): Set<Computer> {
-        return fileContent.parseComputers()
-    }
-
-    override fun parseFrom(computers: Collection<Computer>): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-}
 
 private fun String.parseTag(tag: Tag): String {
     val computerMatcher = TagMatcher(this, tag)
@@ -108,6 +96,40 @@ private fun String.parseOperationSystem() = OperationSystem(parseTag(Tag.OPERATI
 
 private fun String.parseDiscReader() = DiscReader(parseTag(Tag.DISC_READER))
 
+fun StringBuilder.appendStartTag(tag: Tag) {
+    appendNextLines(tag.level.spacesCount)
+    appendTabs(tag.level.tabsCount)
+    append(tag.start)
+}
+
+fun StringBuilder.appendTagValue(tag: Tag, value: String) {
+    if(tag.isComplexField()) {
+        appendNextLine()
+        appendTabs(tag.level.tabsCount)
+    }
+    append(value)
+}
+
+fun StringBuilder.appendEndTag(tag: Tag) {
+    if(tag.isComplexField()) {
+        when(tag.level) {
+            TagLevel.MAIN -> appendNextLines(2)
+            TagLevel.ELEMENT -> appendNextLines(tag.level.spacesCount)
+            else -> appendNextLine()
+        }
+        appendTabs(tag.level.tabsCount)
+    }
+    append(tag.end)
+}
+
+fun StringBuilder.appendTabs(count: Int) {
+    (0 until count).fold(this){ _, _ -> append("\t") }
+}
+
+fun StringBuilder.appendTab() {
+    append(System.getProperty("\t"))
+}
+
 class TagMatcher(private val string: String, tag: Tag) {
 
     private val startTagMatcher = Pattern.compile(tag.start).matcher(string)
@@ -124,25 +146,3 @@ class TagMatcher(private val string: String, tag: Tag) {
 }
 
 fun Matcher.isNotFount() = !find()
-
-enum class Tag(val start: String, val end: String) {
-    COMPUTERS("<laptops>", "</laptops>"),
-    COMPUTER("<laptop>", "</laptop>"),
-    MANUFACTURER("<manufacturer>", "</manufacturer>"),
-    SCREEN("<screen>", "</screen>"),
-    SIZE("<size>", "</size>"),
-    RESOLUTION("<resolution>", "</resolution>"),
-    TYPE("<type>", "</type>"),
-    TOUCHSCREEN("<touchscreen>", "</touchscreen>"),
-    PROCESSOR("<processor>", "</processor>"),
-    NAME("<name>", "</name>"),
-    PHYSICAL_CORES("<physical_cores>", "</physical_cores>"),
-    CLOCK_SPEED("<clock_speed>", "</clock_speed>"),
-    RAM("<ram>", "</ram>"),
-    DISC("<disc>", "</disc>"),
-    STORAGE("<storage>", "</storage>"),
-    GRAPHIC_CARD("<graphic_card>", "</graphic_card>"),
-    MEMORY("<memory>", "</memory>"),
-    OPERATION_SYSTEM("<os>", "</os>"),
-    DISC_READER("<disc_reader>", "</disc_reader>"),
-}

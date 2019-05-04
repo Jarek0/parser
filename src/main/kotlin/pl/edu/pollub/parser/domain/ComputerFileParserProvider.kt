@@ -1,6 +1,7 @@
 package pl.edu.pollub.parser.domain
 
 import pl.edu.pollub.dependencyinjection.Component
+import pl.edu.pollub.parser.domain.xml.XmlFileComputerParser
 
 @Component
 class ComputersParserProvider(
@@ -11,7 +12,7 @@ class ComputersParserProvider(
 
     fun provide(fileType: String): ComputerFileParser {
         return when(fileType) {
-            Format.TXT.value -> txtFileComputersComputerParser
+            Format.CSV.value -> txtFileComputersComputerParser
             Format.XML.value -> xmlFileComputersComputerParser
             else -> invalidComputerParser
         }
@@ -20,7 +21,7 @@ class ComputersParserProvider(
 }
 
 enum class Format(val value: String) {
-    TXT("txt"),
+    CSV("csv"),
     XML("xml")
 }
 
