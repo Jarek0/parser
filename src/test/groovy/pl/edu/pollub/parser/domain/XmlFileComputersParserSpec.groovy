@@ -1,7 +1,7 @@
 package pl.edu.pollub.parser.domain
 
 import pl.edu.pollub.parser.domain.assertions.XmlAssert
-import pl.edu.pollub.parser.domain.xml.XmlFileComputerParser
+import pl.edu.pollub.parser.domain.xml.XmlFileComputersParser
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -21,7 +21,7 @@ class XmlFileComputersParserSpec extends Specification {
     XmlAssert xmlAssert = new XmlAssert()
 
     @Subject
-    def parser = new XmlFileComputerParser()
+    def parser = new XmlFileComputersParser()
 
     def "should parse to computer when file content has single computer"() {
         given:
@@ -396,6 +396,69 @@ class XmlFileComputersParserSpec extends Specification {
             assertComputer(computers[0]).isDataSame(expectedComputer)
     }
 
+    def "should parse to computer when file content has single computer with empty simple fields"() {
+        given:
+            def fileContent = """\
+                                          <laptops>
+                                               <laptop>
+                                                   <manufacturer>Fujitsu</manufacturer>
+                                                   <screen>
+                                                       <size>14"</size>
+                                                       <resolution>1920x1080</resolution>
+                                                       <type>blyszczaca</type>
+                                                       <touchscreen>tak</touchscreen>
+                                                   </screen>
+                                                   <processor>
+                                                       <name>intel i7</name>
+                                                       <physical_cores>8</physical_cores>
+                                                       <clock_speed>1900</clock_speed>
+                                                   </processor>
+                                                   <ram>24GB</ram>
+                                                   <disc>
+                                                       <storage>500GB</storage>
+                                                       <type>HDD</type>
+                                                   </disc>
+                                                   <graphic_card>
+                                                       <name>intel HD Graphics 520</name>
+                                                       <memory>1GB</memory>
+                                                   </graphic_card>
+                                                   <os></os>
+                                                   <disc_reader>Blu-Ray</disc_reader>
+                                               </laptop>
+                                          </laptops>                            
+                                          """.stripIndent()
+        and:
+            def expectedComputer = sampleComputer(
+                    manufacturer: sampleManufacturer(value: "Fujitsu"),
+                    screen: sampleScreen(
+                            size: "14\"",
+                            resolution: "1920x1080",
+                            type: "blyszczaca",
+                            touchscreen: "tak"
+                    ),
+                    processor: sampleProcessor(
+                            name: "intel i7",
+                            physicalCores: "8",
+                            clockSpeed: "1900"
+                    ),
+                    ram: sampleRam(value: "24GB"),
+                    disc: sampleDisc(
+                            storage: "500GB",
+                            type: "HDD"
+                    ),
+                    graphicCard: sampleGraphicCard(
+                            name: "intel HD Graphics 520",
+                            memory: "1GB",
+                    ),
+                    discReader: sampleDiscReader(value: "Blu-Ray")
+            )
+        when:
+            def computers = parser.parseFrom(fileContent)
+        then:
+            computers.size() == 1
+            assertComputer(computers[0]).isDataSame(expectedComputer)
+    }
+
     def "should parse to computer when file content has single computer with empty complex fields"() {
         given:
         def fileContent = """\
@@ -447,69 +510,6 @@ class XmlFileComputersParserSpec extends Specification {
         then:
         computers.size() == 1
         assertComputer(computers[0]).isDataSame(expectedComputer)
-    }
-
-    def "should parse to computer when file content has single computer with empty simple fields"() {
-        given:
-            def fileContent = """\
-                                      <laptops>
-                                           <laptop>
-                                               <manufacturer>Fujitsu</manufacturer>
-                                               <screen>
-                                                   <size>14"</size>
-                                                   <resolution></resolution>
-                                                   <type>blyszczaca</type>
-                                                   <touchscreen>tak</touchscreen>
-                                               </screen>
-                                               <processor>
-                                                   <name>intel i7</name>
-                                                   <physical_cores>8</physical_cores>
-                                                   <clock_speed>1900</clock_speed>
-                                               </processor>
-                                               <ram>24GB</ram>
-                                               <disc>
-                                                   <storage>500GB</storage>
-                                                   <type>HDD</type>
-                                               </disc>
-                                               <graphic_card>
-                                                   <name>intel HD Graphics 520</name>
-                                                   <memory>1GB</memory>
-                                               </graphic_card>
-                                               <os>brak systemu</os>
-                                               <disc_reader>Blu-Ray</disc_reader>
-                                           </laptop>
-                                      </laptops>                            
-                                      """.stripIndent()
-        and:
-            def expectedComputer = sampleComputer(
-                    manufacturer: sampleManufacturer(value: "Fujitsu"),
-                    screen: sampleScreen(
-                            size: "14\"",
-                            type: "blyszczaca",
-                            touchscreen: "tak"
-                    ),
-                    processor: sampleProcessor(
-                            name: "intel i7",
-                            physicalCores: "8",
-                            clockSpeed: "1900"
-                    ),
-                    ram: sampleRam(value: "24GB"),
-                    disc: sampleDisc(
-                            storage: "500GB",
-                            type: "HDD"
-                    ),
-                    graphicCard: sampleGraphicCard(
-                            name: "intel HD Graphics 520",
-                            memory: "1GB",
-                    ),
-                    operationSystem: sampleOperationSystem(value: "brak systemu"),
-                    discReader: sampleDiscReader(value: "Blu-Ray")
-            )
-        when:
-            def computers = parser.parseFrom(fileContent)
-        then:
-            computers.size() == 1
-            assertComputer(computers[0]).isDataSame(expectedComputer)
     }
 
     def "should parse to computer when file content has single computer with missing sub fields"() {
@@ -936,7 +936,7 @@ class XmlFileComputersParserSpec extends Specification {
             assertComputer(computers[0]).isDataSame(expectedComputer)
     }
 
-    def "should parse to computer when file content has single computer with mixed fields"() {
+    def "should parse to computer when file content has single computer with mixed complex fields"() {
         given:
         def fileContent = """\
                                   <laptops>
@@ -1443,7 +1443,7 @@ class XmlFileComputersParserSpec extends Specification {
 
     def "should parse to empty computers list when file content has empty main tag"() {
         expect:
-        parser.parseFrom("<laptops></laptops>").size() == 0
+            parser.parseFrom("<laptops></laptops>").size() == 0
     }
 
     def "should parse to empty computers list when file content has single computer with broken element main tag"() {
@@ -1580,5 +1580,51 @@ class XmlFileComputersParserSpec extends Specification {
             def computers = parser.parseFrom(fileContent)
         then:
             computers.size() == 2
+    }
+
+    def "should parse to computer when file content is not formated and has single computer"() {
+        given:
+        def fileContent = """\
+                              <laptops><laptop><manufacturer>Fujitsu</manufacturer><screen>
+                                           <size>14"</size><resolution>1920x1080</resolution><type>blyszczaca</type>
+                                           <touchscreen>tak</touchscreen>
+                                       </screen>
+                                       <processor><name>intel i7</name><physical_cores>8</physical_cores><clock_speed>1900</clock_speed>
+                                       </processor><ram>24GB</ram><disc><storage>500GB</storage><type>HDD</type>
+                                       </disc><graphic_card><name>intel HD Graphics 520</name><memory>1GB</memory>
+                                       </graphic_card>
+                                       <os>brak systemu</os><disc_reader>Blu-Ray</disc_reader></laptop></laptops>                            
+                              """.stripIndent()
+        and:
+        def expectedComputer = sampleComputer(
+                manufacturer: sampleManufacturer(value: "Fujitsu"),
+                screen: sampleScreen(
+                        size: "14\"",
+                        resolution: "1920x1080",
+                        type: "blyszczaca",
+                        touchscreen: "tak"
+                ),
+                processor: sampleProcessor(
+                        name: "intel i7",
+                        physicalCores: "8",
+                        clockSpeed: "1900"
+                ),
+                ram: sampleRam(value: "24GB"),
+                disc: sampleDisc(
+                        storage: "500GB",
+                        type: "HDD"
+                ),
+                graphicCard: sampleGraphicCard(
+                        name: "intel HD Graphics 520",
+                        memory: "1GB",
+                ),
+                operationSystem: sampleOperationSystem(value: "brak systemu"),
+                discReader: sampleDiscReader(value: "Blu-Ray")
+        )
+        when:
+        def computers = parser.parseFrom(fileContent)
+        then:
+        computers.size() == 1
+        assertComputer(computers[0]).isDataSame(expectedComputer)
     }
 }

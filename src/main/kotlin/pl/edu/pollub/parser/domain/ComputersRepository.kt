@@ -1,6 +1,6 @@
 package pl.edu.pollub.parser.domain
 
-interface ComputerRepository {
+interface ComputersRepository {
 
     fun add(computer: Computer): Boolean
 

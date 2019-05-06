@@ -1,6 +1,6 @@
 package pl.edu.pollub.parser.domain
 
-import pl.edu.pollub.parser.domain.csv.TxtFileComputerParser
+import pl.edu.pollub.parser.domain.csv.CsvFileComputersParser
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -18,7 +18,7 @@ import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleScreen
 class TxtFileComputerParserSpec extends Specification {
 
     @Subject
-    def parser = new TxtFileComputerParser()
+    def parser = new CsvFileComputersParser()
 
     def "should parse to computer when file content has single line without empty fields"() {
         given:

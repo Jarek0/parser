@@ -1,7 +1,7 @@
 package pl.edu.pollub.parser.gui
 
 import pl.edu.pollub.dependencyinjection.Component
-import pl.edu.pollub.parser.application.ComputerApi
+import pl.edu.pollub.parser.application.ComputersApi
 import pl.edu.pollub.parser.domain.*
 import javax.swing.JScrollPane
 import javax.swing.JTable
@@ -9,10 +9,9 @@ import javax.swing.table.DefaultTableModel
 import java.awt.Component as GuiComponent
 import javax.swing.ListSelectionModel
 import javax.swing.DefaultListSelectionModel
-import javax.swing.event.ListSelectionEvent
 
 @Component
-class ComputersTable(private val api: ComputerApi,
+class ComputersTable(private val api: ComputersApi,
                      computersChangedSubject: ComputersChangedSubject,
                      private val computerSelectedSubject: ComputerSelectedSubject
 ): ComputersChangedObserver {

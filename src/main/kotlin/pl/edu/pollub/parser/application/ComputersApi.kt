@@ -5,7 +5,7 @@ import pl.edu.pollub.parser.application.ComputerConverters.Companion.convert
 import java.io.File
 
 @Component
-class ComputerApi(private val computerService: ComputerService) {
+class ComputersApi(private val computerService: ComputerService) {
 
     fun import(command: ImportFileCommand) {
         computerService.import(command.fileToImport)

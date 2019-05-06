@@ -1,7 +1,7 @@
 package pl.edu.pollub.parser.gui
 
 import pl.edu.pollub.dependencyinjection.Component
-import pl.edu.pollub.parser.application.ComputerApi
+import pl.edu.pollub.parser.application.ComputersApi
 import pl.edu.pollub.parser.application.ExportFileQuery
 import pl.edu.pollub.parser.application.ImportFileCommand
 import pl.edu.pollub.parser.application.RemoveComputerCommand
@@ -42,7 +42,7 @@ class ComputersButtons2(val removeComputerButton: RemoveComputerButton,
 
 
 @Component
-class ImportFileButton(private val api: ComputerApi, private val fileChooser: FileChooser) {
+class ImportFileButton(private val api: ComputersApi, private val fileChooser: FileChooser) {
 
     val body: JButton = JButton(IMPORT_BUTTON_TEXT)
 
@@ -61,7 +61,7 @@ class ImportFileButton(private val api: ComputerApi, private val fileChooser: Fi
 }
 
 @Component
-class ExportFileButton(private val api: ComputerApi, private val fileChooser: FileChooser) {
+class ExportFileButton(private val api: ComputersApi, private val fileChooser: FileChooser) {
 
     val body: JButton = JButton(EXPORT_BUTTON_TEXT)
 
@@ -124,7 +124,7 @@ class EditComputerButton(private val computerModal: ComputerModal, subject: Comp
 }
 
 @Component
-class RemoveComputerButton(private val api: ComputerApi, subject: ComputerSelectedSubject): ComputerSelectedObserver {
+class RemoveComputerButton(private val api: ComputersApi, subject: ComputerSelectedSubject): ComputerSelectedObserver {
 
     val body: JButton = JButton(REMOVE_BUTTON_TEXT)
     var computerToRemoveId: ComputerId? = null

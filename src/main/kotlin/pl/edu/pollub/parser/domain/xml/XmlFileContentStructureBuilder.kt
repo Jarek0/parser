@@ -35,7 +35,7 @@ class ComputersTagBuilder(private val builder: StringBuilder) {
         computersTags.add(computerTag)
     }
 
-    fun build() = ComplexField(builder, Tag.COMPUTERS, *computersTags.toTypedArray())
+    fun build() = ComplexField(builder, XmlTag.COMPUTERS, *computersTags.toTypedArray())
 
 }
 
@@ -51,7 +51,7 @@ class ComputerTagBuilder(private val builder: StringBuilder) {
     lateinit var discReaderTag: SimpleField
 
     fun withManufacturer(manufacturer: Manufacturer): ComputerTagBuilder {
-        manufacturerTag = SimpleField(builder, Tag.MANUFACTURER, manufacturer.value)
+        manufacturerTag = SimpleField(builder, XmlTag.MANUFACTURER, manufacturer.value)
         return this
     }
 
@@ -75,7 +75,7 @@ class ComputerTagBuilder(private val builder: StringBuilder) {
     }
 
     fun withRam(ram: Ram): ComputerTagBuilder {
-        ramTag = SimpleField(builder, Tag.RAM, ram.value)
+        ramTag = SimpleField(builder, XmlTag.RAM, ram.value)
         return this
     }
 
@@ -96,17 +96,17 @@ class ComputerTagBuilder(private val builder: StringBuilder) {
     }
 
     fun withOperationSystem(operationSystem: OperationSystem): ComputerTagBuilder {
-        operationSystemTag = SimpleField(builder, Tag.OPERATION_SYSTEM, operationSystem.value)
+        operationSystemTag = SimpleField(builder, XmlTag.OPERATION_SYSTEM, operationSystem.value)
         return this
     }
 
     fun withDiscReader(discReader: DiscReader): ComputerTagBuilder {
-        discReaderTag = SimpleField(builder, Tag.DISC_READER, discReader.value)
+        discReaderTag = SimpleField(builder, XmlTag.DISC_READER, discReader.value)
         return this
     }
 
     fun build(): ComplexField {
-        return ComplexField(builder, Tag.COMPUTER,
+        return ComplexField(builder, XmlTag.COMPUTER,
                 manufacturerTag,
                 screenTag,
                 processorTag,
@@ -127,27 +127,27 @@ class ScreenTagBuilder(private val builder: StringBuilder) {
     lateinit var touchscreenTag: SimpleField
 
     fun withSize(size: String): ScreenTagBuilder {
-        sizeTag = SimpleField(builder, Tag.SIZE, size)
+        sizeTag = SimpleField(builder, XmlTag.SIZE, size)
         return this
     }
 
     fun withResolution(resolution: String): ScreenTagBuilder {
-        resolutionTag = SimpleField(builder, Tag.RESOLUTION, resolution)
+        resolutionTag = SimpleField(builder, XmlTag.RESOLUTION, resolution)
         return this
     }
 
     fun withType(type: String): ScreenTagBuilder {
-        typeTag = SimpleField(builder, Tag.TYPE, type)
+        typeTag = SimpleField(builder, XmlTag.TYPE, type)
         return this
     }
 
     fun withTouchscreen(touchscreen: String): ScreenTagBuilder {
-        touchscreenTag = SimpleField(builder, Tag.TOUCHSCREEN, touchscreen)
+        touchscreenTag = SimpleField(builder, XmlTag.TOUCHSCREEN, touchscreen)
         return this
     }
 
     fun build(): ComplexField {
-        return ComplexField(builder, Tag.SCREEN, sizeTag, resolutionTag, typeTag, touchscreenTag)
+        return ComplexField(builder, XmlTag.SCREEN, sizeTag, resolutionTag, typeTag, touchscreenTag)
     }
 }
 
@@ -158,22 +158,22 @@ class ProcessorTagBuilder(private val builder: StringBuilder) {
     lateinit var clockSpeedTag: SimpleField
 
     fun withName(name: String): ProcessorTagBuilder {
-        nameTag = SimpleField(builder, Tag.NAME, name)
+        nameTag = SimpleField(builder, XmlTag.NAME, name)
         return this
     }
 
     fun withPhysicalCores(physicalCores: String): ProcessorTagBuilder {
-        physicalCoresTag = SimpleField(builder, Tag.PHYSICAL_CORES, physicalCores)
+        physicalCoresTag = SimpleField(builder, XmlTag.PHYSICAL_CORES, physicalCores)
         return this
     }
 
     fun withClockSpeed(clockSpeed: String): ProcessorTagBuilder {
-        clockSpeedTag = SimpleField(builder, Tag.CLOCK_SPEED, clockSpeed)
+        clockSpeedTag = SimpleField(builder, XmlTag.CLOCK_SPEED, clockSpeed)
         return this
     }
 
     fun build(): ComplexField {
-        return ComplexField(builder, Tag.PROCESSOR, nameTag, physicalCoresTag, clockSpeedTag)
+        return ComplexField(builder, XmlTag.PROCESSOR, nameTag, physicalCoresTag, clockSpeedTag)
     }
 }
 
@@ -183,17 +183,17 @@ class DiscTagBuilder(private val builder: StringBuilder) {
     lateinit var typeTag: SimpleField
 
     fun withStorage(storage: String): DiscTagBuilder {
-        storageTag = SimpleField(builder, Tag.STORAGE, storage)
+        storageTag = SimpleField(builder, XmlTag.STORAGE, storage)
         return this
     }
 
     fun withType(type: String): DiscTagBuilder {
-        typeTag = SimpleField(builder, Tag.TYPE, type)
+        typeTag = SimpleField(builder, XmlTag.TYPE, type)
         return this
     }
 
     fun build(): ComplexField {
-        return ComplexField(builder, Tag.DISC, storageTag, typeTag)
+        return ComplexField(builder, XmlTag.DISC, storageTag, typeTag)
     }
 
 }
@@ -204,17 +204,49 @@ class GraphicCardBuilder(private val builder: StringBuilder) {
     lateinit var memoryTag: SimpleField
 
     fun withName(name: String): GraphicCardBuilder {
-        nameTag = SimpleField(builder, Tag.NAME, name)
+        nameTag = SimpleField(builder, XmlTag.NAME, name)
         return this
     }
 
     fun withMemory(memory: String): GraphicCardBuilder {
-        memoryTag = SimpleField(builder, Tag.MEMORY, memory)
+        memoryTag = SimpleField(builder, XmlTag.MEMORY, memory)
         return this
     }
 
     fun build(): ComplexField {
-        return ComplexField(builder, Tag.GRAPHIC_CARD, nameTag, memoryTag)
+        return ComplexField(builder, XmlTag.GRAPHIC_CARD, nameTag, memoryTag)
     }
+
+}
+
+
+abstract class TagValue(open val builder: StringBuilder, open val xmlTag: XmlTag) {
+
+    abstract fun isEmpty(): Boolean
+
+    abstract fun appendValue()
+
+    fun appendTag() {
+        if(isEmpty()) return
+        builder.appendStartTag(xmlTag)
+        appendValue()
+        builder.appendEndTag(xmlTag)
+    }
+
+}
+
+class SimpleField(override val builder: StringBuilder, override val xmlTag: XmlTag, val value: String): TagValue(builder, xmlTag) {
+
+    override fun isEmpty() = value.isEmpty()
+
+    override fun appendValue() = builder.appendTagValue(xmlTag, value)
+
+}
+
+class ComplexField(override val builder: StringBuilder, override val xmlTag: XmlTag, vararg val value: TagValue) : TagValue(builder, xmlTag) {
+
+    override fun isEmpty() = value.all { it.isEmpty() }
+
+    override fun appendValue() = value.forEach { it.appendTag() }
 
 }

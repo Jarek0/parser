@@ -3,10 +3,10 @@ package pl.edu.pollub.parser.instrastructure
 import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.domain.Computer
 import pl.edu.pollub.parser.domain.ComputerId
-import pl.edu.pollub.parser.domain.ComputerRepository
+import pl.edu.pollub.parser.domain.ComputersRepository
 
 @Component
-class InMemoryComputerRepository: ComputerRepository {
+class InMemoryComputersRepository: ComputersRepository {
 
     private val persistedComputers = mutableSetOf<Computer>()
 

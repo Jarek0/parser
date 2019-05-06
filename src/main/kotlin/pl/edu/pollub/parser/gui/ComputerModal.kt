@@ -11,7 +11,7 @@ import javax.swing.*
 typealias ComputerFields = MutableMap<String, JTextField>
 
 @Component
-class ComputerModal(private val api: ComputerApi, mainFrame: MainFrame) {
+class ComputerModal(private val api: ComputersApi, mainFrame: MainFrame) {
 
     private val dialog = JDialog(mainFrame.body, ADD_COMPUTER_TITLE, true)
     private val panel = JPanel()

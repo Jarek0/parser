@@ -1,6 +1,6 @@
 package pl.edu.pollub.parser.domain
 
-interface ComputerFileParser {
+interface ComputersFileParser {
 
     fun parseFrom(fileContent: String): Set<Computer>
 

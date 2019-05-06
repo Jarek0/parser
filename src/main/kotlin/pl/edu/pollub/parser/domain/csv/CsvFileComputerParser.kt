@@ -3,11 +3,12 @@ package pl.edu.pollub.parser.domain.csv
 import pl.edu.pollub.dependencyinjection.Component
 import pl.edu.pollub.parser.application.ComputerConverters.Companion.convert
 import pl.edu.pollub.parser.domain.Computer
-import pl.edu.pollub.parser.domain.ComputerFileParser
+import pl.edu.pollub.parser.domain.ComputersFileParser
+import pl.edu.pollub.parser.domain.appendNextLine
 import java.lang.StringBuilder
 
 @Component
-class TxtFileComputerParser: ComputerFileParser {
+class CsvFileComputersParser: ComputersFileParser {
 
     override fun parseFrom(fileContent: String): Set<Computer> {
         return fileContent.lines().filter { it.isNotBlank() }.map { parseSingle(it) }.toSet()
@@ -48,13 +49,3 @@ class TxtFileComputerParser: ComputerFileParser {
 }
 
 const val DELIMITER = ";"
-
-fun StringBuilder.appendNextLines(count: Int, value: String? = null) {
-    (0 until count).fold(this){ _, _ -> append(System.getProperty("line.separator")) }
-    if(value != null) append(value)
-}
-
-fun StringBuilder.appendNextLine(value: String? = null) {
-    append(System.getProperty("line.separator"))
-    if(value != null) append(value)
-}

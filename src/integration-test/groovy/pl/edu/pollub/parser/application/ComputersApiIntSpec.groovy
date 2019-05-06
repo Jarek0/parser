@@ -5,7 +5,7 @@ import org.junit.rules.TemporaryFolder
 import pl.edu.pollub.dependencyinjection.DependencyInjection
 import pl.edu.pollub.parser.Application
 
-import pl.edu.pollub.parser.domain.ComputerRepository
+import pl.edu.pollub.parser.domain.ComputersRepository
 import pl.edu.pollub.parser.domain.ComputersChangedObserver
 import pl.edu.pollub.parser.domain.ComputersChangedSubject
 import pl.edu.pollub.parser.domain.assertions.XmlAssert
@@ -24,29 +24,29 @@ import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleRam
 import static pl.edu.pollub.parser.domain.samples.SampleComputer.sampleScreen
 import static pl.edu.pollub.parser.utils.FileReader.readFile
 
-class ComputerApiIntSpec extends Specification {
+class ComputersApiIntSpec extends Specification {
 
     @Rule
     TemporaryFolder temporaryFolder = new TemporaryFolder()
 
     XmlAssert xmlAssert = new XmlAssert()
 
-    ComputerRepository repository
+    ComputersRepository repository
 
     ComputersChangedSubject subject
 
     FakeComputersChangedObserver observer = new FakeComputersChangedObserver()
 
     @Subject
-    ComputerApi computerApi
+    ComputersApi computerApi
 
     def setupSpec() {
         DependencyInjection.INSTANCE.start(Application.class)
     }
 
     def setup() {
-        computerApi = DependencyInjection.INSTANCE.inject(ComputerApi.class)
-        repository = DependencyInjection.INSTANCE.inject(ComputerRepository.class)
+        computerApi = DependencyInjection.INSTANCE.inject(ComputersApi.class)
+        repository = DependencyInjection.INSTANCE.inject(ComputersRepository.class)
         subject = DependencyInjection.INSTANCE.inject(ComputersChangedSubject.class)
         temporaryFolder.create()
         subject.subscribe(observer)
@@ -169,10 +169,119 @@ class ComputerApiIntSpec extends Specification {
             observer.isNotified()
     }
 
-
     def "should import xml file with some computers"() {
         given:
             def command = new ImportFileCommand(readFile("computers.xml"))
+        and:
+            def expectedComputers = [
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Fujitsu"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1920x1080",
+                                    type: "blyszczaca",
+                                    touchscreen: "tak"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "8",
+                                    clockSpeed: "1900"
+                            ),
+                            ram: sampleRam(value: "24GB"),
+                            disc: sampleDisc(
+                                    storage: "500GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 520",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "brak systemu"),
+                            discReader: sampleDiscReader(value: "Blu-Ray")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Huawei"),
+                            screen: sampleScreen(
+                                    size: "13\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2400"
+                            ),
+                            ram: sampleRam(value: "12GB"),
+                            disc: sampleDisc(
+                                    storage: "24GB",
+                                    type: "HDD"
+                            ),
+                            graphicCard: sampleGraphicCard(name: "NVIDIA GeForce GTX 1050"),
+                            discReader: sampleDiscReader(value: "brak")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Dell"),
+                            screen: sampleScreen(
+                                    size: "12\"",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i7",
+                                    physicalCores: "4",
+                                    clockSpeed: "2800"
+                            ),
+                            ram: sampleRam(value: "8GB"),
+                            disc: sampleDisc(
+                                    storage: "240GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 4000",
+                                    memory: "1GB",
+                            ),
+                            operationSystem: sampleOperationSystem(value: "Windows 7 Home")
+                    ),
+                    sampleComputer(
+                            manufacturer: sampleManufacturer(value: "Asus"),
+                            screen: sampleScreen(
+                                    size: "14\"",
+                                    resolution: "1600x900",
+                                    type: "matowa",
+                                    touchscreen: "nie"
+                            ),
+                            processor: sampleProcessor(
+                                    name: "intel i5",
+                                    physicalCores: "4",
+                            ),
+                            ram: sampleRam(value: "16GB"),
+                            disc: sampleDisc(
+                                    storage: "120GB",
+                                    type: "SSD"
+                            ),
+                            graphicCard: sampleGraphicCard(
+                                    name: "intel HD Graphics 5000",
+                                    memory: "1GB",
+                            ),
+                            discReader: sampleDiscReader(value: "brak")
+                    )
+            ]
+        when:
+            computerApi.import(command)
+        then:
+            def importedComputers = repository.getAll()
+            importedComputers.size() == 4
+            assertComputer(importedComputers[0]).isDataSame(expectedComputers[0])
+            assertComputer(importedComputers[1]).isDataSame(expectedComputers[1])
+            assertComputer(importedComputers[2]).isDataSame(expectedComputers[2])
+            assertComputer(importedComputers[3]).isDataSame(expectedComputers[3])
+        and:
+            observer.isNotified()
+    }
+
+    def "should import yaml file with some computers"() {
+        given:
+            def command = new ImportFileCommand(readFile("computers.yaml"))
         and:
             def expectedComputers = [
                     sampleComputer(

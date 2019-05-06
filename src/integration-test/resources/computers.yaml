@@ -1,0 +1,75 @@
+﻿laptops: 
+ laptop: 
+  - 
+   manufacturer: Fujitsu
+   screen:
+    size: "14\""
+    resolution: 1920x1080
+    type: blyszczaca
+    touchscreen: tak
+   processor:
+    name: 'intel i7'
+    physical_cores: 8
+    clock_speed: 1900
+   ram: 24GB
+   disc: 
+    storage: 500GB
+    type: HDD
+   graphic_card: 
+    name: "intel HD Graphics 520"
+    memory: 1GB
+   os: "brak systemu"
+   disc_reader: "Blu-Ray"
+  - 
+   manufacturer: Huawei
+   screen: 
+    size: "13\""
+    type: matowa
+    touchscreen: nie
+   processor: 
+    name: "intel i7"
+    physical_cores: 4
+    clock_speed: 2400
+   ram: 12GB
+   disc: 
+    storage: 24GB
+    type: HDD
+   graphic_card: 
+    name: "NVIDIA GeForce GTX 1050"
+   disc_reader: brak
+  - 
+   manufacturer: Dell
+   screen: 
+    size: "12\""
+    type: matowa
+    touchscreen: nie
+   processor: 
+    name: "intel i7"
+    physical_cores: 4
+    clock_speed: 2800
+   ram: 8GB
+   disc: 
+    storage: 240GB
+    type: SSD
+   graphic_card: 
+    name: "intel HD Graphics 4000"
+    memory: 1GB
+   os: "Windows 7 Home"
+  - 
+   manufacturer: Asus
+   screen: 
+    size: "14\""
+    resolution: 1600x900
+    type: matowa
+    touchscreen: nie
+   processor: 
+    name: "intel i5"
+    physical_cores: 4
+   ram: 16GB
+   disc: 
+    storage: 120GB
+    type: SSD
+   graphic_card: 
+    name: "intel HD Graphics 5000"
+    memory: 1GB
+   disc_reader: brak

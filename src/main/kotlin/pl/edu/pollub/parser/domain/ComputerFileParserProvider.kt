@@ -1,20 +1,23 @@
 package pl.edu.pollub.parser.domain
 
 import pl.edu.pollub.dependencyinjection.Component
-import pl.edu.pollub.parser.domain.csv.TxtFileComputerParser
-import pl.edu.pollub.parser.domain.xml.XmlFileComputerParser
+import pl.edu.pollub.parser.domain.csv.CsvFileComputersParser
+import pl.edu.pollub.parser.domain.xml.XmlFileComputersParser
+import pl.edu.pollub.parser.domain.yaml.YamlFileComputersParser
 
 @Component
 class ComputersParserProvider(
-        private val txtFileComputersComputerParser: TxtFileComputerParser,
-        private val xmlFileComputersComputerParser: XmlFileComputerParser,
-        private val invalidComputerParser: InvalidFileComputerParser
+        private val csvFileComputersParser: CsvFileComputersParser,
+        private val xmlFileComputersParser: XmlFileComputersParser,
+        private val yamlFileComputersParser: YamlFileComputersParser,
+        private val invalidComputerParser: InvalidFileComputersParser
 ) {
 
-    fun provide(fileType: String): ComputerFileParser {
+    fun provide(fileType: String): ComputersFileParser {
         return when(fileType) {
-            Format.CSV.value -> txtFileComputersComputerParser
-            Format.XML.value -> xmlFileComputersComputerParser
+            Format.CSV.value -> csvFileComputersParser
+            Format.XML.value -> xmlFileComputersParser
+            Format.YAML.value -> yamlFileComputersParser
             else -> invalidComputerParser
         }
     }
@@ -23,11 +26,12 @@ class ComputersParserProvider(
 
 enum class Format(val value: String) {
     CSV("csv"),
-    XML("xml")
+    XML("xml"),
+    YAML("yaml")
 }
 
 @Component
-class InvalidFileComputerParser: ComputerFileParser {
+class InvalidFileComputersParser: ComputersFileParser {
 
     override fun parseFrom(fileContent: String): Set<Computer> {
         return emptySet()
